@@ -1,0 +1,44 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:narmail.Styles">
+
+    <Style x:Key="Landing_MainHeader" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeHeader}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,14"/>        
+    </Style>
+
+    <Style x:Key="Landing_SubHeader" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeSmallSubHeader}"/>
+        <Setter Property="Foreground" Value="#CACACA"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,28"/>
+        <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+    </Style>
+
+    <Style x:Key="Landing_ConnectButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="#CACACA"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,7"/>
+    </Style>
+
+    <Style x:Key="Landing_ConnectButtonIcon" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Margin" Value="0,0,7,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="Landing_ConnectButtonContent" TargetType="TextBlock">
+        <Setter Property="Margin" Value="0,0,7,0"/>
+    </Style>
+
+    <Style x:Key="Landing_ConnectButtonProgress" TargetType="ProgressRing">
+        <Setter Property="IsActive" Value="True"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+    </Style>
+
+</ResourceDictionary>
