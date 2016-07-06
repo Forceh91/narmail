@@ -12,6 +12,9 @@ namespace narmail
     /// </summary>
     sealed partial class App : Application
     {
+        public static App currentApp { get; private set; }
+        public narmapi.Main narmailAPI = new narmapi.Main("_LxcSGe6t3b64Q");
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -23,6 +26,9 @@ namespace narmail
                 Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            // setup the current app
+            currentApp = this;
         }
 
         /// <summary>

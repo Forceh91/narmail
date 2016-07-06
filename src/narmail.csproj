@@ -98,6 +98,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\LandingViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -144,7 +145,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Convertors\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="narmapi\narmapi.csproj">
+      <Project>{fa2598b8-6783-4ee8-bffb-958282b1f4d6}</Project>
+      <Name>narmapi</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
