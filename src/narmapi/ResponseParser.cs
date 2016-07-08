@@ -6,7 +6,7 @@ using System.Text;
 
 namespace narmapi
 {
-    public partial class Main
+    public partial class NarmAPI
     {
         private void parseAuthToken(string response)
         {
@@ -55,6 +55,29 @@ namespace narmapi
             catch (Exception e)
             {
                 _events.onErrorOccured(e.Message);
+            }
+        }
+
+        private void parseAccountInfoResponse(string response)
+        {
+            try
+            {
+                using (MemoryStream memoryStream = new MemoryStream(Encoding.Unicode.GetBytes(response)))
+                {
+                    // read the memory stream for the data
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AccountInformationResponse));
+                    AccountInformationResponse accountInformation = (serializer.ReadObject(memoryStream) as AccountInformationResponse);
+
+                    // get the user's name
+                    username = accountInformation.name;
+
+                    // call the account info received event
+                    _events.onAccountInfoReceived(accountInformation);
+                }
+            }
+            catch (Exception e)
+            {
+                _events.onFailedAppAuth(e.Message);
             }
         }
     }

@@ -6,11 +6,11 @@ using Windows.Security.Authentication.Web;
 
 namespace narmapi
 {
-    public partial class Main
+    public partial class NarmAPI
     {
-        private readonly string _baseURI = "https://reddit.com/";
+        private readonly string _baseURI = "https://ssl.reddit.com/";
         private readonly string _baseOAuthURI = "https://oauth.reddit.com/";
-        private readonly string _redirectURI = "http://madnight.co.uk/";
+        private readonly string _redirectURI = "http://madnight.co.uk";
 
         private string _username = string.Empty;
         public string username { get { return _username; } set { _username = value; } }
@@ -45,7 +45,7 @@ namespace narmapi
         // reddit needs this bit to confirm some stuff
         private string _stateCode;
 
-        public Main(string clientID)
+        public NarmAPI(string clientID)
         {
             _events = new Events();
             _clientID = clientID;
@@ -69,7 +69,7 @@ namespace narmapi
             try
             {
                 // create the request and parse the response
-                string postResponse = await Utils.postHTTPCodeString(new Uri(stringBuilder.ToString()), _clientID, "grant_type=authorization_code&code=" + authCode + "&redirect_uri=" + _redirectURI);
+                string postResponse = await Utils.postHTTPCodeString(new Uri(stringBuilder.ToString()), _clientID, authCode, _redirectURI);
                 parseAuthToken(postResponse);
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace narmapi
             try
             {
                 // create the request and parse the response
-                string postResponse = await Utils.postHTTPCodeString(new Uri(stringBuilder.ToString()), _clientID, "grant_type=refresh_token&refresh_token=" + _refreshToken);
+                string postResponse = await Utils.postHTTPCodeString(new Uri(stringBuilder.ToString()), _clientID, _refreshToken, _redirectURI);
                 parseRefreshedAccess(postResponse);
             }
             catch (Exception ex)
@@ -106,9 +106,9 @@ namespace narmapi
             stringBuilder.Append("client_id=" + Uri.EscapeDataString(_clientID));
             stringBuilder.Append("&response_type=code");
             stringBuilder.Append("&state=" + _stateCode);
-            stringBuilder.Append("&redirect_uri=" + Uri.EscapeDataString(_redirectURI));
+            stringBuilder.Append("&redirect_uri=" + Uri.EscapeUriString(_redirectURI));
             stringBuilder.Append("&duration=permanent");
-            stringBuilder.Append("&scope=identity,submit,privatemessage,read");
+            stringBuilder.Append("&scope=identity,submit,privatemessages,read");
 
             // fire the event to get the app to do whatever it needs
             _events.onAppAuthCallback(new Uri(stringBuilder.ToString()), new Uri(_redirectURI));
@@ -167,10 +167,30 @@ namespace narmapi
                         _events.onFailedAppAuth("Error: " + error);
                         return;
                     }
-
-                    // request an access token
-                    requestAccessToken(code);
                 }
+
+                // request an access token
+                requestAccessToken(code);
+            }
+        }
+
+        public async void getAccountInformation()
+        {
+            if (await verifyAPI() == false)
+                return;
+
+            StringBuilder stringBuilder = new StringBuilder(_baseOAuthURI);
+            stringBuilder.AppendFormat("api/v1/me.json");
+
+            // grab the information about the user
+            try
+            {
+                HTTPResponse getResponse = await Utils.getHTTPString(new Uri(stringBuilder.ToString()), _accessToken);
+                parseAccountInfoResponse(getResponse.response);
+            }
+            catch (Exception ex)
+            {
+                _events.onErrorOccured(ex.Message);
             }
         }
 
@@ -182,6 +202,35 @@ namespace narmapi
 
             // it's out of date so lets refresh
             await refreshAccessToken();
+        }
+
+        private bool checkIsRateLimited()
+        {
+            // there's nothing left and they've used the limit
+            if (rateLimitRemaining == 0 && rateLimitUsed > 0)
+                return true;
+
+            // all good
+            return false;
+        }
+
+        private async Task<bool> verifyAPI()
+        {
+            // check we have an access token
+            if (string.IsNullOrEmpty(_accessToken))
+                throw new Exception("No access token has been provided.");
+
+            // check the access token is still valid
+            await checkAccessTokenIsValid();
+
+            // make sure we're not rate limited
+            if (checkIsRateLimited() == true)
+            {
+                _events.onRateLimited(rateLimitReset);
+                return false;
+            }
+
+            return true;
         }
     }
 }

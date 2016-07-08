@@ -41,4 +41,11 @@
         <Setter Property="VerticalAlignment" Value="Stretch"/>
     </Style>
 
+    <Style x:Key="Landing_ConnectingInformation" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#EFEFEF"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,7,0,0"/>
+        <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+    </Style>
+
 </ResourceDictionary>

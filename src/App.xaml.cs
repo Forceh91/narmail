@@ -1,4 +1,5 @@
-﻿using System;
+﻿using narmail.Models;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -13,7 +14,6 @@ namespace narmail
     sealed partial class App : Application
     {
         public static App currentApp { get; private set; }
-        public narmapi.Main narmailAPI = new narmapi.Main("_LxcSGe6t3b64Q");
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -29,6 +29,9 @@ namespace narmail
 
             // setup the current app
             currentApp = this;
+
+            // initialize the api
+            NarmapiModel.initializeAPI();
         }
 
         /// <summary>
@@ -37,7 +40,8 @@ namespace narmail
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
-        {
+        { 
+
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -71,7 +75,11 @@ namespace narmail
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(Views.Landing), e.Arguments);
+
+                    if (string.IsNullOrEmpty(NarmapiModel.getAccessToken()) == true)
+                        rootFrame.Navigate(typeof(Views.Landing), e.Arguments);
+                    else
+                        rootFrame.Navigate(typeof(Views.Inbox), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();

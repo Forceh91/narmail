@@ -24,14 +24,16 @@
 
                 <Button Click="connectRedditAccount" IsEnabled="{Binding loginButtonEnabled}" Style="{StaticResource Landing_ConnectButton}">
                     <Grid>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource Landing_ConnectButtonIcon}" Text=""/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource Landing_ConnectButtonIcon}" Text=""/>
                             <TextBlock Style="{StaticResource Landing_ConnectButtonContent}" Text="Connect reddit account"/>
                         </StackPanel>
-                        
+
                         <ProgressRing Style="{StaticResource Landing_ConnectButtonProgress}" Visibility="{Binding loggingInProgressRing}"/>
                     </Grid>
                 </Button>
+
+                <TextBlock Style="{StaticResource Landing_ConnectingInformation}" Text="{Binding loggingInText}" Visibility="{Binding loggingInTextVisibility}"/>
             </StackPanel>
         </Grid>
     </Grid>

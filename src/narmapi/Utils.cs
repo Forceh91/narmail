@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace narmapi
 
     public static class Utils
     {
-        private static readonly string userAgent = "Windows 10:Narmail:v0.0.1 by /u/forceh";
+        private static readonly string userAgent = "Windows 10:Narmail:v2.0.0 by /u/forceh";
         private static string rateLimitRemaining;
         private static string rateLimitReset;
         private static string rateLimitUsed;
@@ -30,8 +31,8 @@ namespace narmapi
             using (HttpClient httpClient = new HttpClient())
             {
                 // add some headers such as the bearer and user agent
-                httpClient.DefaultRequestHeaders.Add("Authorization", "bearer " + accessToken);
-                httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", userAgent);
 
                 // get what we want
                 HttpResponseMessage httpResponseMessage = await httpClient.GetAsync(requestURI);
@@ -95,22 +96,29 @@ namespace narmapi
             }
         }
 
-        public static async Task<string> postHTTPCodeString(Uri requestURI, string clientID, string codeString)
+        public static async Task<string> postHTTPCodeString(Uri requestURI, string clientID, string authCode, string redirectURI)
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 // generate the password thingy
-                string clientIDString = clientID + ": ";
-                string userPassBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(clientIDString));
+                string basicAuth = clientID + ": ";
+                string basicAuthBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(basicAuth));
 
                 // send the basic auth stuff
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + userPassBase64);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthBase64);
 
                 // the form data to send
-                HttpContent httpContent = new StringContent(codeString, Encoding.UTF8, "application/x-www-form-urlencoded");
+                FormUrlEncodedContent formContent = new FormUrlEncodedContent(
+                    new List<KeyValuePair<string, string>>
+                    {
+                        new KeyValuePair<string, string>("grant_type", "authorization_code"),
+                        new KeyValuePair<string, string>("code", authCode),
+                        new KeyValuePair<string, string>("redirect_uri", redirectURI)
+                    }
+                );
 
                 // get what we want
-                HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(requestURI, httpContent);
+                HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(requestURI, formContent);
                 if (httpResponseMessage.IsSuccessStatusCode == false)
                     return null;
                 

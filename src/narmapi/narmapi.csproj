@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIRequests\AccessToken.cs" />
+    <Compile Include="APIResponses\AccountInformationResponse.cs" />
     <Compile Include="APIResponses\AuthorizedAccessToken.cs" />
     <Compile Include="APIResponses\AuthorizedRefreshToken.cs" />
     <Compile Include="Events.cs" />
