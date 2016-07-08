@@ -24,6 +24,7 @@ namespace narmail.Models
 
             // setup some events
             api.events.eErrorOccured += apiErrorOccured;
+            api.events.eRateLimited += apiRateLimited;
         }
 
         public static string getAccessToken()
@@ -101,6 +102,11 @@ namespace narmail.Models
         private static void apiErrorOccured(object sender, Events.ErrorEvent e)
         {
             MessageModel.sendDialogMessage("NarmAPI Error", e.error);
+        }
+
+        private static void apiRateLimited(object sender, Events.RateLimitInformation e)
+        {
+            MessageModel.sendDialogMessage("NarmAPI Error", "Woah, slow down! You're too quick for us, please try again in " + e.secondsRemaining + " seconds.");
         }
     }
 }
