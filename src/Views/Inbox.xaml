@@ -5,6 +5,7 @@
     xmlns:local="using:narmail.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:narmail.Controls"
     xmlns:mvvm="using:narmail.Mvvm"
     mc:Ignorable="d">
 
@@ -13,6 +14,24 @@
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Pivot Style="{StaticResource TabControl_Pivot}">
+            <PivotItem>
+                <PivotItem.Header>
+                    <controls:TabControl Glyph="&#59157;" Label="Inbox"/>
+                </PivotItem.Header>
+            </PivotItem>
 
+            <PivotItem>
+                <PivotItem.Header>
+                    <controls:TabControl Glyph="&#59594;" Label="Sent"/>
+                </PivotItem.Header>
+            </PivotItem>
+
+            <PivotItem>
+                <PivotItem.Header>
+                    <controls:TabControl Glyph="&#59158;" Label="Friends"/>
+                </PivotItem.Header>
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>
