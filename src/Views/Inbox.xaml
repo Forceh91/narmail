@@ -33,7 +33,7 @@
                 
                 <!-- Message subject / Date Time -->
                 <TextBlock Style="{StaticResource Inbox_MessageList_MessageSubject}" Text="{Binding subject}"/>
-                <TextBlock Grid.Column="1" Style="{StaticResource Inbox_MessageList_MessageSubject}" Text="{Binding createdUTC, Converter={StaticResource MessageTimeReceived}}"/>
+                <TextBlock Grid.Column="1" Style="{StaticResource Inbox_MessageList_MessageDate}" Text="{Binding createdUTC, Converter={StaticResource MessageTimeReceived}}"/>
                 
                 <!-- Message sender / subreddit -->
                 <TextBlock Grid.Row="1" Style="{StaticResource Inbox_MessageList_MessageAuthor}" Text="{Binding author}"/>
@@ -83,7 +83,7 @@
                     <TextBlock Style="{StaticResource Inbox_NoMessages}" Text="You currently have no messages in your inbox." Visibility="{Binding inboxNoMessageVisibility}"/>
                 
                     <!-- List of messages -->
-                    <ListView IsItemClickEnabled="True" ItemContainerStyle="{StaticResource Inbox_MessageList_ItemContainer}" ItemsSource="{Binding inboxList}" ItemTemplate="{StaticResource InboxListItem}" SelectionMode="None"/>
+                    <ListView IsItemClickEnabled="True" ItemClick="inboxMessageClicked" ItemContainerStyle="{StaticResource Inbox_MessageList_ItemContainer}" ItemsSource="{Binding inboxList}" ItemTemplate="{StaticResource InboxListItem}" SelectionMode="None"/>
                 </Grid>
             </PivotItem>
 

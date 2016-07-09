@@ -1,0 +1,51 @@
+﻿<Page
+    x:Class="narmail.Views.Message"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:narmail.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:convertors="using:narmail.Convertors"
+    xmlns:mvvm="using:narmail.Mvvm"
+    xmlns:universalmarkdown="using:UniversalMarkdown"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <mvvm:MessageViewModel/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <convertors:MessageTimeReceivedConvertor x:Key="MessageTimeReceived"/>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Style="{StaticResource MessagePage_InfoArea}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Message subject / Date Time -->
+            <TextBlock Style="{StaticResource MessagePage_MessageSubject}" Text="{Binding message.subject}"/>
+            <TextBlock Grid.Column="1" Style="{StaticResource MessagePage_MessageSubject}" Text="{Binding message.createdUTC, Converter={StaticResource MessageTimeReceived}}"/>
+
+            <!-- Message sender / subreddit -->
+            <TextBlock Grid.Row="1" Style="{StaticResource MessagePage_MessageAuthor}" Text="{Binding message.author}"/>
+            <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource MessagePage_MessageSubreddit}" Text="{Binding message.subreddit}"/>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" Padding="0,0,8,0" VerticalScrollBarVisibility="Auto">
+            <universalmarkdown:MarkdownTextBlock Margin="14,7" Markdown="{Binding message.body}"/>
+        </ScrollViewer>
+    </Grid>
+</Page>

@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Styles/TabControlStyles.xaml"/>
                 <ResourceDictionary Source="Styles/LandingStyles.xaml"/>
                 <ResourceDictionary Source="Styles/InboxStyles.xaml"/>
+                <ResourceDictionary Source="Styles/MessageStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

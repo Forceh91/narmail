@@ -1,4 +1,6 @@
-﻿using narmail.Mvvm;
+﻿using narmail.Models;
+using narmail.Mvvm;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace narmail.Views
@@ -12,9 +14,20 @@ namespace narmail.Views
             ViewModel = (DataContext as InboxViewModel);
         }
 
-        private void pageUnloaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void pageUnloaded(object sender, RoutedEventArgs e)
         {
             ViewModel.unloadEvents();
+        }
+
+        private void inboxMessageClicked(object sender, ItemClickEventArgs e)
+        {
+            // get the message model from the clicked item
+            RedditMessageModel redditMessageModel = (e.ClickedItem as RedditMessageModel);
+            if (redditMessageModel == null)
+                return;
+
+            // open it up!
+            this.Frame.Navigate(typeof(Message), redditMessageModel);
         }
     }
 }
