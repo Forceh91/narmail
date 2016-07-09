@@ -9,6 +9,8 @@ namespace narmail.Views
     {
         private InboxViewModel ViewModel = null;
         private bool isInboxScrollingEventAssigned = false;
+        private bool isSentScrollingEventAssigned = false;
+
         public Inbox()
         {
             this.InitializeComponent();
@@ -73,6 +75,39 @@ namespace narmail.Views
             // load more messages if we've hit the bottom (almost)
             if (scrollProgress >= 0.98)
                 ViewModel.fetchMoreInboxMessages();
+        }
+
+        private void sentListSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // check we haven't assigned the scrollviewer event already
+            if (isSentScrollingEventAssigned == true)
+                return;
+
+            // try and find the scroll viewer for this
+            ScrollViewer scrollViewer = Utils.GetScrollViewer((sender as ListView));
+            if (scrollViewer == null)
+                return;
+
+            // assign the event
+            scrollViewer.ViewChanged += sentListScrolled;
+
+            // tell it not to do it again
+            isSentScrollingEventAssigned = true;
+        }
+
+        private void sentListScrolled(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            // check we have a scrollviewer (if not something has badly broken)
+            ScrollViewer scrollViewer = (sender as ScrollViewer);
+            if (scrollViewer == null)
+                return;
+
+            // get the progress
+            double scrollProgress = (scrollViewer.VerticalOffset / scrollViewer.ScrollableHeight);
+
+            // load more messages if we've hit the bottom (almost)
+            if (scrollProgress >= 0.98)
+                ViewModel.fetchMoreSentMessages();
         }
     }
 }

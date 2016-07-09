@@ -28,9 +28,11 @@ namespace narmail.Mvvm
         // store the before and after for the next time we request the sent messages
         private string sentBefore = string.Empty;
         private string sentAfter = string.Empty;
+        private bool areMoreSentMessagesAvailable = false;
 
         // are we loading things?
         bool isInboxLoading = false;
+        bool isSentLoading = false;
 
         public InboxViewModel()
         {
@@ -47,6 +49,7 @@ namespace narmail.Mvvm
 
             // fetch the sent messages
             NarmapiModel.api.getAccountSent();
+            isSentLoading = true;
         }
 
         public void unloadEvents()
@@ -72,6 +75,23 @@ namespace narmail.Mvvm
 
             // fetch the messages
             NarmapiModel.api.getAccountInbox(string.Empty, inboxAfter);
+        }
+
+        public void fetchMoreSentMessages()
+        {
+            // make sure we're not loading messages
+            if (isSentLoading == true)
+                return;
+
+            // make sure messages are available
+            if (areMoreSentMessagesAvailable == false)
+                return;
+
+            // we're loading more messages
+            isSentLoading = true;
+
+            // fetch the messages
+            NarmapiModel.api.getAccountSent(string.Empty, sentAfter);
         }
 
         private void accountInboxFailed(object sender, Events.ErrorEvent e)
@@ -145,7 +165,8 @@ namespace narmail.Mvvm
 
         private void accountSentFailed(object sender, Events.ErrorEvent e)
         {
-
+            // not loading
+            isSentLoading = false;
         }
 
         private void accountSentReceived(object sender, narmapi.APIResponses.AccountSentResponse sentResponse)
@@ -200,6 +221,15 @@ namespace narmail.Mvvm
 
             // hide the no message text
             sentNoMessageVisibility = Visibility.Collapsed;
+
+            // no longer loading
+            isSentLoading = false;
+
+            // check if more messages are available (otherwise we'll just infinite load messages!)
+            if (string.IsNullOrEmpty(sentResponse.data.after) == true)
+                areMoreSentMessagesAvailable = false;
+            else
+                areMoreSentMessagesAvailable = true;
         }
     }
 }
