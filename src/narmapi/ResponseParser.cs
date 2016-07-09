@@ -100,5 +100,25 @@ namespace narmapi
                 _events.onAccountInboxFailed(e.Message);
             }
         }
+
+        private void parseAccountSentResponse(string response)
+        {
+            try
+            {
+                using (MemoryStream memoryStream = new MemoryStream(Encoding.Unicode.GetBytes(response)))
+                {
+                    // read the memory stream for the data
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AccountSentResponse));
+                    AccountSentResponse accountSent = (serializer.ReadObject(memoryStream) as AccountSentResponse);
+
+                    // call the account inbox received event
+                    _events.onAccountSentReceived(accountSent);
+                }
+            }
+            catch (Exception e)
+            {
+                _events.onAccountSentFailed(e.Message);
+            }
+        }
     }
 }

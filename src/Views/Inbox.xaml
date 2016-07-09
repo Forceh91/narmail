@@ -43,6 +43,32 @@
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource Inbox_MessageList_MessageBody}" Text="{Binding body}"/>
             </Grid>
         </DataTemplate>
+
+        <DataTemplate x:Key="SentListItem">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Message subject / Date Time -->
+                <TextBlock Style="{StaticResource Inbox_MessageList_MessageSubject}" Text="{Binding subject}"/>
+                <TextBlock Grid.Column="1" Style="{StaticResource Inbox_MessageList_MessageSubject}" Text="{Binding createdUTC, Converter={StaticResource MessageTimeReceived}}"/>
+
+                <!-- Message sender / subreddit -->
+                <TextBlock Grid.Row="1" Style="{StaticResource Inbox_MessageList_MessageAuthor}" Text="{Binding dest}"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource Inbox_MessageList_MessageSubreddit}" Text="{Binding subreddit}"/>
+
+                <!-- Message -->
+                <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource Inbox_MessageList_MessageBody}" Text="{Binding body}"/>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -65,6 +91,14 @@
                 <PivotItem.Header>
                     <controls:TabControl Glyph="&#59594;" Label="Sent"/>
                 </PivotItem.Header>
+
+                <Grid>
+                    <!-- No messages text -->
+                    <TextBlock Style="{StaticResource Inbox_NoMessages}" Text="You haven't sent any messages yet." Visibility="{Binding sentNoMessageVisibility}"/>
+
+                    <!-- List of messages -->
+                    <ListView IsItemClickEnabled="True" ItemContainerStyle="{StaticResource Inbox_MessageList_ItemContainer}" ItemsSource="{Binding sentList}" ItemTemplate="{StaticResource SentListItem}" SelectionMode="None"/>
+                </Grid>
             </PivotItem>
 
             <PivotItem>

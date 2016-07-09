@@ -49,6 +49,8 @@ namespace narmapi
         public delegate void eventAccountInfoReceived(object sender, AccountInformation e);
         public delegate void eventAccountInboxReceived(object sender, AccountInboxResponse e);
         public delegate void eventAccountInboxFailed(object sender, ErrorEvent e);
+        public delegate void eventAccountSentReceived(object sender, AccountSentResponse e);
+        public delegate void eventAccountSentFailed(object sender, ErrorEvent e);
         public delegate void eventRateLimited(object sender, RateLimitInformation e);
 
         public event eventErrorOccured eErrorOccured;
@@ -59,6 +61,8 @@ namespace narmapi
         public event eventAccountInfoReceived eAccountInfoReceived;
         public event eventAccountInboxReceived eAccountInboxReceived;
         public event eventAccountInboxFailed eAccountInboxFailed;
+        public event eventAccountSentReceived eAccountSentReceived;
+        public event eventAccountSentFailed eAccountSentFailed;
         public event eventRateLimited eRateLimited;
 
         public void onErrorOccured(string error)
@@ -99,6 +103,16 @@ namespace narmapi
         public void onAccountInboxFailed(string error)
         {
             eAccountInboxFailed?.Invoke(this, new ErrorEvent() { error = error });
+        }
+
+        public void onAccountSentReceived(AccountSentResponse sentResponse)
+        {
+            eAccountSentReceived?.Invoke(this, sentResponse);
+        }
+
+        public void onAccountSentFailed(string error)
+        {
+            eAccountSentFailed?.Invoke(this, new ErrorEvent() { error = error });
         }
 
         public void onRateLimited(int secondsRemaining)

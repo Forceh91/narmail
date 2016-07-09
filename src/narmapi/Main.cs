@@ -228,6 +228,37 @@ namespace narmapi
             }
         }
 
+        public async void getAccountSent(string before = "", string after = "")
+        {
+            // make sure we're all good to use the api
+            if (await verifyAPI() == false)
+                return;
+
+            // build the url
+            StringBuilder stringBuilder = new StringBuilder(_baseOAuthURI);
+            stringBuilder.Append("message/sent/?raw_json=1");
+
+            // append the before/after if need to
+            if (string.IsNullOrEmpty(before) == false)
+                stringBuilder.AppendFormat("&before={0}", before);
+            else if (string.IsNullOrEmpty(after) == false)
+                stringBuilder.AppendFormat("&after={0}", after);
+
+            // grab the information about the inbox
+            try
+            {
+                HTTPResponse getResponse = await Utils.getHTTPString(new Uri(stringBuilder.ToString()), _accessToken);
+                parseAccountSentResponse(getResponse.response);
+
+                // update rate limits
+                updateRateLimits(getResponse.rateLimitUsed, getResponse.rateLimitRemaining, getResponse.rateLimitReset);
+            }
+            catch (Exception ex)
+            {
+                _events.onErrorOccured(ex.Message);
+            }
+        }
+
         private void updateRateLimits(int rateUsed, double rateRemaining, int rateReset)
         {
             _rateLimitUsed = rateUsed;
