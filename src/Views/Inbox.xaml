@@ -84,7 +84,7 @@
                     <TextBlock Style="{StaticResource Inbox_NoMessages}" Text="You currently have no messages in your inbox." Visibility="{Binding inboxNoMessageVisibility}"/>
                 
                     <!-- List of messages -->
-                    <ListView IsItemClickEnabled="True" ItemClick="inboxMessageClicked" ItemContainerStyle="{StaticResource Inbox_MessageList_ItemContainer}" ItemsSource="{Binding inboxList}" ItemTemplate="{StaticResource InboxListItem}" SelectionMode="None"/>
+                    <ListView IsItemClickEnabled="True" ItemClick="inboxMessageClicked" ItemContainerStyle="{StaticResource Inbox_MessageList_ItemContainer}" ItemsSource="{Binding inboxList}" ItemTemplate="{StaticResource InboxListItem}" SelectionMode="None" SizeChanged="inboxListSizeChanged"/>
                 </Grid>
             </PivotItem>
 

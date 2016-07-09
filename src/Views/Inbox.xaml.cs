@@ -8,6 +8,7 @@ namespace narmail.Views
     public sealed partial class Inbox : Page
     {
         private InboxViewModel ViewModel = null;
+        private bool isInboxScrollingEventAssigned = false;
         public Inbox()
         {
             this.InitializeComponent();
@@ -39,6 +40,39 @@ namespace narmail.Views
 
             // open it up!
             this.Frame.Navigate(typeof(Message), redditMessageModel);
+        }
+
+        private void inboxListSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // check we haven't assigned the scrollviewer event already
+            if (isInboxScrollingEventAssigned == true)
+                return;
+
+            // try and find the scroll viewer for this
+            ScrollViewer scrollViewer = Utils.GetScrollViewer((sender as ListView));
+            if (scrollViewer == null)
+                return;
+
+            // assign the event
+            scrollViewer.ViewChanged += inboxListScrolled;
+
+            // tell it not to do it again
+            isInboxScrollingEventAssigned = true;
+        }
+
+        private void inboxListScrolled(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            // check we have a scrollviewer (if not something has badly broken)
+            ScrollViewer scrollViewer = (sender as ScrollViewer);
+            if (scrollViewer == null)
+                return;
+
+            // get the progress
+            double scrollProgress = (scrollViewer.VerticalOffset / scrollViewer.ScrollableHeight);
+
+            // load more messages if we've hit the bottom (almost)
+            if (scrollProgress >= 0.98)
+                ViewModel.fetchMoreInboxMessages();
         }
     }
 }
