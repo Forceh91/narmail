@@ -36,6 +36,11 @@ namespace narmapi
             public AccountInformationResponse account { get; set; }
         }
 
+        public class AccountInbox : EventArgs
+        {
+            public AccountInboxResponse inbox { get; set; }
+        }
+
         public class RateLimitInformation : EventArgs
         {
             public int secondsRemaining { get; set; }
@@ -47,6 +52,8 @@ namespace narmapi
         public delegate void eventFailedAppAuth(object sender, FailedAppAuth e);
         public delegate void eventFailedAppReauth(object sender, FailedAppReauth e);
         public delegate void eventAccountInfoReceived(object sender, AccountInformation e);
+        public delegate void eventAccountInboxReceived(object sender, AccountInbox e);
+        public delegate void eventAccountInboxFailed(object sender, ErrorEvent e);
         public delegate void eventRateLimited(object sender, RateLimitInformation e);
 
         public event eventErrorOccured eErrorOccured;
@@ -55,6 +62,8 @@ namespace narmapi
         public event eventFailedAppAuth eFailedAppAuth;
         public event eventFailedAppReauth eFailledAppReauth;
         public event eventAccountInfoReceived eAccountInfoReceived;
+        public event eventAccountInboxReceived eAccountInboxReceived;
+        public event eventAccountInboxFailed eAccountInboxFailed;
         public event eventRateLimited eRateLimited;
 
         public void onErrorOccured(string error)
@@ -85,6 +94,16 @@ namespace narmapi
         public void onAccountInfoReceived(AccountInformationResponse accountInfo)
         {
             eAccountInfoReceived?.Invoke(this, new AccountInformation() { account = accountInfo });
+        }
+
+        public void onAccountInboxReceived(AccountInboxResponse inboxResponse)
+        {
+            eAccountInboxReceived?.Invoke(this, new AccountInbox() { inbox = inboxResponse });
+        }
+
+        public void onAccountInboxFailed(string error)
+        {
+            eAccountInboxFailed?.Invoke(this, new ErrorEvent() { error = error });
         }
 
         public void onRateLimited(int secondsRemaining)

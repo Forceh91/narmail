@@ -96,7 +96,7 @@ namespace narmapi
             }
         }
 
-        public static async Task<string> postHTTPCodeString(Uri requestURI, string clientID, string authCode, string redirectURI)
+        public static async Task<string> postHTTPCodeString(Uri requestURI, string clientID, string authCode, string redirectURI, bool isRefresh = false)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -108,14 +108,28 @@ namespace narmapi
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuthBase64);
 
                 // the form data to send
-                FormUrlEncodedContent formContent = new FormUrlEncodedContent(
-                    new List<KeyValuePair<string, string>>
-                    {
-                        new KeyValuePair<string, string>("grant_type", "authorization_code"),
-                        new KeyValuePair<string, string>("code", authCode),
-                        new KeyValuePair<string, string>("redirect_uri", redirectURI)
-                    }
-                );
+                FormUrlEncodedContent formContent = null;
+                if (isRefresh == false)
+                {
+                    formContent = new FormUrlEncodedContent(
+                        new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>("grant_type", "authorization_code"),
+                            new KeyValuePair<string, string>("code", authCode),
+                            new KeyValuePair<string, string>("redirect_uri", redirectURI)
+                        }
+                    );
+                }
+                else
+                {
+                    formContent = new FormUrlEncodedContent(
+                        new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                            new KeyValuePair<string, string>("refresh_token", authCode),
+                        }
+                    );
+                }
 
                 // get what we want
                 HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(requestURI, formContent);
