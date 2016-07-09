@@ -99,6 +99,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Convertors\InboxConvertors.cs" />
+    <Compile Include="Convertors\MessageConvertors.cs" />
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\NarmapiModel.cs" />
     <Compile Include="Models\RedditMessageModel.cs" />

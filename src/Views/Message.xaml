@@ -16,6 +16,7 @@
 
     <Page.Resources>
         <convertors:MessageTimeReceivedConvertor x:Key="MessageTimeReceived"/>
+        <convertors:MessageToFromUserConvertor x:Key="MessageToFromUser"/>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -40,12 +41,12 @@
             <TextBlock Grid.Column="1" Style="{StaticResource MessagePage_MessageSubject}" Text="{Binding message.createdUTC, Converter={StaticResource MessageTimeReceived}}"/>
 
             <!-- Message sender / subreddit -->
-            <TextBlock Grid.Row="1" Style="{StaticResource MessagePage_MessageAuthor}" Text="{Binding message.author}"/>
+            <TextBlock Grid.Row="1" Style="{StaticResource MessagePage_MessageAuthor}" Text="{Binding message, Converter={StaticResource MessageToFromUser}}"/>
             <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource MessagePage_MessageSubreddit}" Text="{Binding message.subreddit}"/>
         </Grid>
 
         <ScrollViewer Grid.Row="1" Padding="0,0,8,0" VerticalScrollBarVisibility="Auto">
-            <universalmarkdown:MarkdownTextBlock Margin="14,7" Markdown="{Binding message.body}"/>
+            <universalmarkdown:MarkdownTextBlock Markdown="{Binding message.body}" Style="{StaticResource MessagePage_MessageBody}"/>
         </ScrollViewer>
     </Grid>
 </Page>

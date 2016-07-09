@@ -29,5 +29,16 @@ namespace narmail.Views
             // open it up!
             this.Frame.Navigate(typeof(Message), redditMessageModel);
         }
+
+        private void sentMessageClicked(object sender, ItemClickEventArgs e)
+        {
+            // get the message model from the clicked item
+            RedditMessageModel redditMessageModel = (e.ClickedItem as RedditMessageModel);
+            if (redditMessageModel == null)
+                return;
+
+            // open it up!
+            this.Frame.Navigate(typeof(Message), redditMessageModel);
+        }
     }
 }

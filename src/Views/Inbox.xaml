@@ -97,7 +97,7 @@
                     <TextBlock Style="{StaticResource Inbox_NoMessages}" Text="You haven't sent any messages yet." Visibility="{Binding sentNoMessageVisibility}"/>
 
                     <!-- List of messages -->
-                    <ListView IsItemClickEnabled="True" ItemContainerStyle="{StaticResource Inbox_MessageList_ItemContainer}" ItemsSource="{Binding sentList}" ItemTemplate="{StaticResource SentListItem}" SelectionMode="None"/>
+                    <ListView IsItemClickEnabled="True" ItemClick="sentMessageClicked" ItemContainerStyle="{StaticResource Inbox_MessageList_ItemContainer}" ItemsSource="{Binding sentList}" ItemTemplate="{StaticResource SentListItem}" SelectionMode="None"/>
                 </Grid>
             </PivotItem>
 
