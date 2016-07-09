@@ -56,4 +56,12 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
     </Style>
 
+    <Style x:Key="Inbox_MessageList_MessageBodyUnread" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeNormal}"/>
+        <Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundAccentBrush}"/>
+        <Setter Property="Margin" Value="0,0,7,0"/>
+        <Setter Property="MaxLines" Value="1"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
 </ResourceDictionary>
