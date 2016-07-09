@@ -3,4 +3,57 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:narmail.Styles">
 
+    <Style x:Key="Inbox_NoMessages" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Foreground" Value="DarkGray"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="7,14"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+    </Style>
+
+    <Style x:Key="Inbox_MessageList_ItemContainer" TargetType="ListViewItem">
+        <Setter Property="Background" Value="#1A1A1A"/>
+        <Setter Property="BorderBrush" Value="#000"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="14,7"/>        
+    </Style>
+
+    <Style x:Key="Inbox_MessageList_MessageSubject" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeNormal}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Margin" Value="0,0,7,7"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="Inbox_MessageList_MessageDate" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeNormal}"/>
+        <Setter Property="Margin" Value="7,0,0,7"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
+
+    <Style x:Key="Inbox_MessageList_MessageAuthor" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeNormal}"/>
+        <Setter Property="Foreground" Value="#CACACA"/>
+        <Setter Property="Margin" Value="0,0,7,7"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="Inbox_MessageList_MessageSubreddit" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeNormal}"/>
+        <Setter Property="Foreground" Value="#CACACA"/>
+        <Setter Property="Margin" Value="7,0,0,7"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
+
+    <Style x:Key="Inbox_MessageList_MessageBody" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeNormal}"/>
+        <Setter Property="Foreground" Value="#AAA"/>
+        <Setter Property="Margin" Value="0,0,7,0"/>
+        <Setter Property="MaxLines" Value="1"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
 </ResourceDictionary>

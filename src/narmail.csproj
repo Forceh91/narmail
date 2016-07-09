@@ -98,8 +98,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Convertors\InboxConvertors.cs" />
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\NarmapiModel.cs" />
+    <Compile Include="Models\RedditMessageModel.cs" />
+    <Compile Include="Models\Utils.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\InboxViewModel.cs" />
     <Compile Include="Mvvm\LandingViewModel.cs" />
@@ -169,9 +172,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Convertors\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="narmapi\narmapi.csproj">
       <Project>{fa2598b8-6783-4ee8-bffb-958282b1f4d6}</Project>

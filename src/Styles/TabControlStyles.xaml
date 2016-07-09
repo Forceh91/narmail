@@ -15,7 +15,7 @@
         <Setter Property="IsTextScaleFactorEnabled" Value="False"/>
         <Setter Property="LineHeight" Value="14"/>
         <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
-        <Setter Property="Margin" Value="0,14"/>
+        <Setter Property="Margin" Value="0,7,0,14"/>
         <Setter Property="MaxLines" Value="2"/>
         <Setter Property="TextAlignment" Value="Center"/>
     </Style>

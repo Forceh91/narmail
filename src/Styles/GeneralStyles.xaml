@@ -10,5 +10,9 @@
     <x:Double x:Key="TextSizeHeader">26</x:Double>
     <x:Double x:Key="TextSizeSubHeader">22</x:Double>
     <x:Double x:Key="TextSizeSmallSubHeader">16</x:Double>
+    <x:Double x:Key="TextSizeExtraLarge">18</x:Double>
+    <x:Double x:Key="TextSizeLarge">16</x:Double>
+    <x:Double x:Key="TextSizeNormal">14</x:Double>
+    <x:Double x:Key="TextSizeSmall">12</x:Double>
 
 </ResourceDictionary>

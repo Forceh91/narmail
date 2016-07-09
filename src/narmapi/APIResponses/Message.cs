@@ -2,6 +2,7 @@
 
 namespace narmapi.APIResponses
 {
+    [DataContract]
     public class Message
     {
         [DataMember(Name = "kind")]
@@ -11,6 +12,7 @@ namespace narmapi.APIResponses
         public MessageData data { get; set; }
     }
 
+    [DataContract]
     public class MessageData
     {
         [DataMember(Name = "body")]
@@ -23,7 +25,7 @@ namespace narmapi.APIResponses
         public bool wasComment { get; set; }
 
         [DataMember(Name = "first_message")]
-        public long firstMessage { get; set; }
+        public long? firstMessage { get; set; }
 
         [DataMember(Name = "name")]
         public string name { get; set; }
@@ -35,7 +37,7 @@ namespace narmapi.APIResponses
         public double created { get; set; }
 
         [DataMember(Name = "created_utc")]
-        public string createdUTC { get; set; }
+        public double createdUTC { get; set; }
 
         [DataMember(Name = "dest")]
         public string dest { get; set; }

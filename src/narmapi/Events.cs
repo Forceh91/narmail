@@ -36,11 +36,6 @@ namespace narmapi
             public AccountInformationResponse account { get; set; }
         }
 
-        public class AccountInbox : EventArgs
-        {
-            public AccountInboxResponse inbox { get; set; }
-        }
-
         public class RateLimitInformation : EventArgs
         {
             public int secondsRemaining { get; set; }
@@ -52,7 +47,7 @@ namespace narmapi
         public delegate void eventFailedAppAuth(object sender, FailedAppAuth e);
         public delegate void eventFailedAppReauth(object sender, FailedAppReauth e);
         public delegate void eventAccountInfoReceived(object sender, AccountInformation e);
-        public delegate void eventAccountInboxReceived(object sender, AccountInbox e);
+        public delegate void eventAccountInboxReceived(object sender, AccountInboxResponse e);
         public delegate void eventAccountInboxFailed(object sender, ErrorEvent e);
         public delegate void eventRateLimited(object sender, RateLimitInformation e);
 
@@ -98,7 +93,7 @@ namespace narmapi
 
         public void onAccountInboxReceived(AccountInboxResponse inboxResponse)
         {
-            eAccountInboxReceived?.Invoke(this, new AccountInbox() { inbox = inboxResponse });
+            eAccountInboxReceived?.Invoke(this, inboxResponse);
         }
 
         public void onAccountInboxFailed(string error)
