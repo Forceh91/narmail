@@ -27,6 +27,15 @@ namespace narmail.Models
             api.events.eRateLimited += apiRateLimited;
         }
 
+        public static void logout()
+        {
+            // logging out is simple - just set everything to a blank string
+            setAccessToken(string.Empty);
+            setRefreshToken(string.Empty);
+            setAccountUsername(string.Empty);
+            setAccessTokenExpiryTime(0);
+        }
+
         public static string getAccessToken()
         {
             string settingName = "narmail_access_token";

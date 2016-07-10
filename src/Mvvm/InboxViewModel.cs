@@ -3,6 +3,7 @@ using narmapi;
 using System;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace narmail.Mvvm
 {
@@ -92,6 +93,17 @@ namespace narmail.Mvvm
 
             // fetch the messages
             NarmapiModel.api.getAccountSent(string.Empty, sentAfter);
+        }
+
+        public void logout()
+        {
+            // seems we want to logout
+            NarmapiModel.logout();
+
+            // so send them to the connection page
+            Frame rootFrame = new Frame();
+            Window.Current.Content = rootFrame;
+            rootFrame.Navigate(typeof(Views.Landing));
         }
 
         private void accountInboxFailed(object sender, Events.ErrorEvent e)

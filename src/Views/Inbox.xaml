@@ -118,6 +118,10 @@
             <CommandBar.PrimaryCommands>
                 <AppBarButton Click="gotoComposeMessage" Icon="Add" Label="New message"/>
             </CommandBar.PrimaryCommands>
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Click="logoutUser" Icon="LeaveChat" Label="Logout"/>
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
 </Page>

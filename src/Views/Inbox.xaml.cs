@@ -115,5 +115,10 @@ namespace narmail.Views
             // simply just navigate to the compose view
             Frame.Navigate(typeof(Compose));
         }
+
+        private void logoutUser(object sender, RoutedEventArgs e)
+        {
+            ViewModel.logout();
+        }
     }
 }
