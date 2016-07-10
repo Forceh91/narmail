@@ -2,6 +2,7 @@
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -51,6 +52,7 @@ namespace narmail
                 rootFrame = new Frame();
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
+                rootFrame.Navigated += OnNavigated;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -74,6 +76,7 @@ namespace narmail
                     else
                         rootFrame.Navigate(typeof(Views.Inbox), e.Arguments);
                 }
+
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
@@ -101,6 +104,47 @@ namespace narmail
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private void OnNavigated(object sender, NavigationEventArgs e)
+        {
+            Frame rootFrame = (Window.Current.Content as Frame);
+
+            // clear the backstack if we go to the home page
+            if (e.SourcePageType == typeof(Views.Inbox))
+                rootFrame.BackStack?.Clear();
+
+            // handle the back button
+            SystemNavigationManager systemNavigationManager = SystemNavigationManager.GetForCurrentView();
+            if (systemNavigationManager == null)
+                return;
+
+            // can we go back?
+            if (rootFrame.CanGoBack == true)
+                systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            else
+                systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+
+            // handle the back button event
+            systemNavigationManager.BackRequested -= backButtonEvent;
+            systemNavigationManager.BackRequested += backButtonEvent;
+        }
+
+        private void backButtonEvent(object sender, BackRequestedEventArgs e)
+        {
+            Frame rootFrame = (Window.Current.Content as Frame);
+
+            // can we go back?
+            if (rootFrame.CanGoBack == true)
+                rootFrame.GoBack();
+            else
+            {
+                // we can't go back, if we're on the front page then exit the app
+                if (rootFrame.CurrentSourcePageType == typeof(Views.Inbox))
+                    Current.Exit();
+            }
+
+            e.Handled = true;
         }
     }
 }
