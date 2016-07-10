@@ -154,6 +154,8 @@
             </CommandBar.PrimaryCommands>
 
             <CommandBar.SecondaryCommands>
+                <AppBarButton Click="feedbackPage" Icon="Comment" IsEnabled="{Binding isCommandBarButtonEnabled}" Label="About"/>
+                <AppBarButton Click="rateReview" Icon="Comment" IsEnabled="{Binding isCommandBarButtonEnabled}" Label="Rate + Review"/>
                 <AppBarButton Click="logoutUser" Icon="LeaveChat" IsEnabled="{Binding isCommandBarButtonEnabled}" Label="Logout"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>

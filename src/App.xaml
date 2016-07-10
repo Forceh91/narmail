@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="Styles/InboxStyles.xaml"/>
                 <ResourceDictionary Source="Styles/MessageStyles.xaml"/>
                 <ResourceDictionary Source="Styles/ComposeStyles.xaml"/>
+                <ResourceDictionary Source="Styles/FeedbackStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -1,5 +1,7 @@
 ﻿using narmail.Models;
 using narmail.Mvvm;
+using System;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -129,6 +131,16 @@ namespace narmail.Views
                 return;
 
             ViewModel.messageFriend(redditFriendModel);
+        }
+
+        private void feedbackPage(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(Feedback));
+        }
+
+        private async void rateReview(object sender, RoutedEventArgs e)
+        {
+            await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=57919e11-d572-4c16-8e28-1191c51531b3"));
         }
     }
 }

@@ -1,0 +1,56 @@
+﻿<Page
+    x:Class="narmail.Views.Feedback"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:narmail.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="using:narmail.Mvvm"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <mvvm:FeedbackPageViewModel/>
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Style="{StaticResource FeedbackPage_AppNameHeader}" Text="About Narmail"/>
+                <TextBlock Style="{StaticResource FeedbackPage_AppSubHeader}" Text="{Binding versionInfo}"/>
+
+                <TextBlock Style="{StaticResource FeedbackPage_MainHeader}" Text="Twitter"/>
+                <TextBlock Style="{StaticResource FeedbackPage_MainSubHeader}" Text="The best way to get in touch with us quickly is through our Twitter accounts:"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource FeedbackPage_MainInfoHeader}" Text="Madnight Software"/>
+                    <HyperlinkButton Content="@MadnightSW" NavigateUri="http://www.twitter.com/@MadnightSW" Style="{StaticResource FeedbackPage_MainInfoHyperlink}" Width="125"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource FeedbackPage_MainInfoHeader}" Text="Lead Developer"/>
+                    <HyperlinkButton Content="@Forceh91" NavigateUri="http://www.twitter.com/@Forceh91" Style="{StaticResource FeedbackPage_MainInfoHyperlink}" Width="125"/>
+                    <TextBlock Style="{StaticResource FeedbackPage_MainInfoText}" Text="Matt Hadden"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeedbackPage_MainHeader}" Text="Get Developing!"/>
+                    <TextBlock Style="{StaticResource FeedbackPage_MainSubHeader}" Text="Narmail is completely open-source so feel free to add features and fix bugs as you need!"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <HyperlinkButton Content="Narmail on GitHub" NavigateUri="https://github.com/Forceh91/narmail" Style="{StaticResource FeedbackPage_MainInfoHyperlink}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeedbackPage_MainHeader}" Text="E-Mail"/>
+                    <TextBlock Style="{StaticResource FeedbackPage_MainSubHeader}" Text="Have you noticed a bug or just want to get in touch with us?"/>
+
+                    <StackPanel Orientation="Vertical">
+                        <HyperlinkButton Content="Madnight Bug Tracker" NavigateUri="http://bug.madnight.co.uk" Style="{StaticResource FeedbackPage_MainInfoHyperlink}"/>
+                        <HyperlinkButton Content="press@madnight.co.uk" NavigateUri="mailto:press@madnight.co.uk" Style="{StaticResource FeedbackPage_MainInfoHyperlink}"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
