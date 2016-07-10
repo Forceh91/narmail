@@ -100,15 +100,21 @@
     </Compile>
     <Compile Include="Convertors\InboxConvertors.cs" />
     <Compile Include="Convertors\MessageConvertors.cs" />
+    <Compile Include="Models\ComposedMessageModel.cs" />
+    <Compile Include="Models\InitialComposeModel.cs" />
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\NarmapiModel.cs" />
     <Compile Include="Models\RedditMessageModel.cs" />
     <Compile Include="Models\Utils.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
+    <Compile Include="Mvvm\ComposeViewModel.cs" />
     <Compile Include="Mvvm\InboxViewModel.cs" />
     <Compile Include="Mvvm\LandingViewModel.cs" />
     <Compile Include="Mvvm\MessageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Compose.xaml.cs">
+      <DependentUpon>Compose.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Inbox.xaml.cs">
       <DependentUpon>Inbox.xaml</DependentUpon>
     </Compile>
@@ -144,6 +150,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Styles\ComposeStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="Styles\GeneralStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -168,6 +179,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\Compose.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Inbox.xaml">
       <SubType>Designer</SubType>

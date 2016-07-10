@@ -58,7 +58,7 @@ namespace narmapi
             }
         }
 
-        public static async Task<HTTPResponse> postHTTPString(Uri requestURI, string accessToken, string jsonString)
+        public static async Task<HTTPResponse> postHTTPString(Uri requestURI, string accessToken, string formValues)
         {
             if (string.IsNullOrEmpty(accessToken) == true)
                 return null;
@@ -66,11 +66,11 @@ namespace narmapi
             using (HttpClient httpClient = new HttpClient())
             {
                 // add some headers such as the bearer and user agent
-                httpClient.DefaultRequestHeaders.Add("Authorization", "bearer " + accessToken);
-                httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", userAgent);
 
                 // the form data to send
-                HttpContent httpContent = new StringContent(jsonString, Encoding.UTF8, "application/x-www-form-urlencoded");
+                HttpContent httpContent = new StringContent(formValues, Encoding.UTF8, "application/x-www-form-urlencoded");
 
                 // get what we want
                 HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(requestURI, httpContent);

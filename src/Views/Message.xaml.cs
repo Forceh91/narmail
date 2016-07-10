@@ -35,5 +35,10 @@ namespace narmail.Views
             // base stuff
             base.OnNavigatedTo(e);
         }
+
+        private void gotoReplyMessage(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            ViewModel.replyToMessage();
+        }
     }
 }

@@ -23,6 +23,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Style="{StaticResource MessagePage_InfoArea}">
@@ -48,5 +49,11 @@
         <ScrollViewer Grid.Row="1" Padding="0,0,8,0" VerticalScrollBarVisibility="Auto">
             <universalmarkdown:MarkdownTextBlock Markdown="{Binding message.body}" Style="{StaticResource MessagePage_MessageBody}"/>
         </ScrollViewer>
+
+        <CommandBar Grid.Row="2" Visibility="{Binding isCommandBarVisible}">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Click="gotoReplyMessage" Icon="MailReply" Label="Reply"/>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
     </Grid>
 </Page>

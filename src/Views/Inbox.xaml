@@ -73,6 +73,11 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
         <Pivot Margin="-12,0,-12,0" Style="{StaticResource TabControl_Pivot}">
             <PivotItem>
                 <PivotItem.Header>
@@ -82,7 +87,7 @@
                 <Grid>
                     <!-- No messages text -->
                     <TextBlock Style="{StaticResource Inbox_NoMessages}" Text="You currently have no messages in your inbox." Visibility="{Binding inboxNoMessageVisibility}"/>
-                
+
                     <!-- List of messages -->
                     <ListView IsItemClickEnabled="True" ItemClick="inboxMessageClicked" ItemContainerStyle="{StaticResource Inbox_MessageList_ItemContainer}" ItemsSource="{Binding inboxList}" ItemTemplate="{StaticResource InboxListItem}" SelectionMode="None" SizeChanged="inboxListSizeChanged"/>
                 </Grid>
@@ -108,5 +113,11 @@
                 </PivotItem.Header>
             </PivotItem>
         </Pivot>
+
+        <CommandBar Grid.Row="1">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Click="gotoComposeMessage" Icon="Add" Label="New message"/>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
     </Grid>
 </Page>

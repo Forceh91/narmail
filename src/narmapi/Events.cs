@@ -36,6 +36,13 @@ namespace narmapi
             public AccountInformationResponse account { get; set; }
         }
 
+        public class SendMessageError : EventArgs
+        {
+            public string errorID { get; set; }
+            public string errorMessage { get; set; }
+            public string errorInput { get; set; }
+        }
+
         public class RateLimitInformation : EventArgs
         {
             public int secondsRemaining { get; set; }
@@ -51,6 +58,8 @@ namespace narmapi
         public delegate void eventAccountInboxFailed(object sender, ErrorEvent e);
         public delegate void eventAccountSentReceived(object sender, AccountSentResponse e);
         public delegate void eventAccountSentFailed(object sender, ErrorEvent e);
+        public delegate void eventSendMessageSuccess(object sender);
+        public delegate void eventSendMessageFailed(object sender, SendMessageError e);
         public delegate void eventRateLimited(object sender, RateLimitInformation e);
 
         public event eventErrorOccured eErrorOccured;
@@ -63,6 +72,8 @@ namespace narmapi
         public event eventAccountInboxFailed eAccountInboxFailed;
         public event eventAccountSentReceived eAccountSentReceived;
         public event eventAccountSentFailed eAccountSentFailed;
+        public event eventSendMessageSuccess eSendMessageSuccess;
+        public event eventSendMessageFailed eSendMessageFailed;
         public event eventRateLimited eRateLimited;
 
         public void onErrorOccured(string error)
@@ -113,6 +124,16 @@ namespace narmapi
         public void onAccountSentFailed(string error)
         {
             eAccountSentFailed?.Invoke(this, new ErrorEvent() { error = error });
+        }
+
+        public void onSendMessageSuccess()
+        {
+            eSendMessageSuccess?.Invoke(this);
+        }
+
+        public void onSendMessageFailed(SendMessageError e)
+        {
+            eSendMessageFailed?.Invoke(this, e);
         }
 
         public void onRateLimited(int secondsRemaining)

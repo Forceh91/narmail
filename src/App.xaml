@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Styles/LandingStyles.xaml"/>
                 <ResourceDictionary Source="Styles/InboxStyles.xaml"/>
                 <ResourceDictionary Source="Styles/MessageStyles.xaml"/>
+                <ResourceDictionary Source="Styles/ComposeStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

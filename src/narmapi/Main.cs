@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
+using static narmapi.Events;
 
 namespace narmapi
 {
@@ -256,6 +257,103 @@ namespace narmapi
             catch (Exception ex)
             {
                 _events.onErrorOccured(ex.Message);
+            }
+        }
+
+        public async void sendMessage(string subject, string destination, string message)
+        {
+            // make sure we're ok to use the api
+            if (await verifyAPI() == false)
+                return;
+
+            // build the url
+            StringBuilder stringBuilder = new StringBuilder(_baseOAuthURI);
+            stringBuilder.AppendFormat("api/compose/");
+
+            // build the form values
+            string formValues = string.Format("api_type=json&to={0}&subject={1}&text={2}", destination, subject, message);
+
+            // attempt to send the message
+            try
+            {
+                HTTPResponse postResponse = await Utils.postHTTPString(new Uri(stringBuilder.ToString()), _accessToken, formValues);
+                parseSendMessageResponse(postResponse.response);
+
+                // update rate limits
+                updateRateLimits(postResponse.rateLimitUsed, postResponse.rateLimitRemaining, postResponse.rateLimitReset);
+            }
+            catch (Exception ex)
+            {
+                SendMessageError sendMessageError = new SendMessageError()
+                {
+                    errorID = "UNKNOWN_ERROR",
+                    errorMessage = ex.Message,
+                    errorInput = string.Empty
+                };
+
+                _events.onSendMessageFailed(sendMessageError);
+            }
+        }
+
+        public async void sendComment(string messageID, string message)
+        {
+            // make sure we're ok to use the api
+            if (await verifyAPI() == false)
+                return;
+
+            // build the url
+            StringBuilder stringBuilder = new StringBuilder(_baseOAuthURI);
+            stringBuilder.AppendFormat("api/comment/");
+
+            // build the form values
+            string formValues = string.Format("api_type=json&thing_id={0}&text={1}", messageID, message);
+
+            // attempt to send the message
+            try
+            {
+                HTTPResponse postResponse = await Utils.postHTTPString(new Uri(stringBuilder.ToString()), _accessToken, formValues);
+                parseSendCommentResponse(postResponse.response);
+
+                // update rate limits
+                updateRateLimits(postResponse.rateLimitUsed, postResponse.rateLimitRemaining, postResponse.rateLimitReset);
+            }
+            catch (Exception ex)
+            {
+                SendMessageError sendMessageError = new SendMessageError()
+                {
+                    errorID = "UNKNOWN_ERROR",
+                    errorMessage = ex.Message,
+                    errorInput = string.Empty
+                };
+
+                _events.onSendMessageFailed(sendMessageError);
+            }
+        }
+
+        public async void markMessageAsRead(string messageID)
+        {
+            // make sure we're ok to use the api
+            if (await verifyAPI() == false)
+                return;
+
+            // build the url
+            StringBuilder stringBuilder = new StringBuilder(_baseOAuthURI);
+            stringBuilder.AppendFormat("api/read_message/");
+
+            // build the form values
+            string formValues = string.Format("id={0}", messageID);
+
+            // attempt to mark the message as read
+            try
+            {
+                HTTPResponse postResponse = await Utils.postHTTPString(new Uri(stringBuilder.ToString()), _accessToken, formValues);
+
+                // update rate limits
+                updateRateLimits(postResponse.rateLimitUsed, postResponse.rateLimitRemaining, postResponse.rateLimitReset);
+            }
+            catch
+            {
+                return;
             }
         }
 

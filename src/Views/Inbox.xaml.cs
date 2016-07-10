@@ -109,5 +109,11 @@ namespace narmail.Views
             if (scrollProgress >= 0.98)
                 ViewModel.fetchMoreSentMessages();
         }
+
+        private void gotoComposeMessage(object sender, RoutedEventArgs e)
+        {
+            // simply just navigate to the compose view
+            Frame.Navigate(typeof(Compose));
+        }
     }
 }
