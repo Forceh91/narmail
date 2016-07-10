@@ -122,6 +122,26 @@ namespace narmapi
             }
         }
 
+        private void parseAccountFriendsResponse(string response)
+        {
+            try
+            {
+                using (MemoryStream memoryStream = new MemoryStream(Encoding.Unicode.GetBytes(response)))
+                {
+                    // read the memory stream for the data
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AccountFriendsResponse));
+                    AccountFriendsResponse accountFriends = (serializer.ReadObject(memoryStream) as AccountFriendsResponse);
+
+                    // call the account inbox received event
+                    _events.onAccountFriendsReceived(accountFriends);
+                }
+            }
+            catch (Exception e)
+            {
+                _events.onAccountFriendsFailed(e.Message);
+            }
+        }
+
         private void parseSendMessageResponse(string response)
         {
             SendMessageError sendMessageError = new SendMessageError()

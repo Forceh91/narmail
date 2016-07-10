@@ -43,7 +43,7 @@ namespace narmail.Mvvm
                 isReply = true,
                 messageID = message.name,
                 parentMessage = message.body,
-                subject = message.subject
+                subject = (message.wasComment == true ? message.linkTitle : message.subject)
             };
 
             // direct the user to that page

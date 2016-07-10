@@ -16,6 +16,7 @@
     </Page.DataContext>
 
     <Page.Resources>
+        <convertors:MessageTitleConvertor x:Key="MessageTitle"/>
         <convertors:MessageTimeReceivedConvertor x:Key="MessageTimeReceived"/>
         <convertors:MessageIsUnreadConvertor x:Key="MessageIsUnread"/>
 
@@ -33,7 +34,7 @@
                 </Grid.RowDefinitions>
                 
                 <!-- Message subject / Date Time -->
-                <TextBlock Style="{StaticResource Inbox_MessageList_MessageSubject}" Text="{Binding subject}"/>
+                <TextBlock Style="{StaticResource Inbox_MessageList_MessageSubject}" Text="{Binding Converter={StaticResource MessageTitle}}"/>
                 <TextBlock Grid.Column="1" Style="{StaticResource Inbox_MessageList_MessageDate}" Text="{Binding createdUTC, Converter={StaticResource MessageTimeReceived}}"/>
                 
                 <!-- Message sender / subreddit -->
@@ -70,6 +71,21 @@
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="2" Style="{StaticResource Inbox_MessageList_MessageBody}" Text="{Binding body}"/>
             </Grid>
         </DataTemplate>
+
+        <DataTemplate x:Key="FriendsListItem">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Friend name -->
+                <TextBlock Style="{StaticResource Inbox_FriendsList_FriendName}" Text="{Binding name}"/>
+
+                <!-- Friends since data -->
+                <TextBlock Grid.Row="1" Style="{StaticResource Inbox_FriendsList_FriendSinceDate}" Text="{Binding friendsSince}"/>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -79,7 +95,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Padding="7">
+        <Grid Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Padding="14,7">
             <StackPanel Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Orientation="Horizontal" Visibility="{Binding isCommunicatingWithRedditVisibility}">
                 <ProgressRing Style="{StaticResource Inbox_RetrievingProgress}"/>
                 <TextBlock Style="{StaticResource Inbox_RetrievingText}" Text="Communicating with reddit..."/>
@@ -121,6 +137,14 @@
                 <PivotItem.Header>
                     <controls:TabControl Glyph="&#59158;" Label="Friends"/>
                 </PivotItem.Header>
+
+                <Grid>
+                    <!-- No friends text -->
+                    <TextBlock Style="{StaticResource Inbox_NoMessages}" Text="You haven't got any reddit friends :(" Visibility="{Binding noFriendsMessageVisibility}"/>
+
+                    <!-- List of friends -->
+                    <ListView IsItemClickEnabled="True" ItemClick="friendClicked" ItemContainerStyle="{StaticResource Inbox_FriendsList_ItemContainer}" ItemsSource="{Binding friendsList}" ItemTemplate="{StaticResource FriendsListItem}" SelectionMode="None"/>
+                </Grid>
             </PivotItem>
         </Pivot>
 

@@ -21,6 +21,7 @@
 
     <Style x:Key="MessagePage_MessageDate" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{ThemeResource TextSizeLarge}"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="Margin" Value="7,0,0,7"/>
         <Setter Property="TextAlignment" Value="Right"/>
     </Style>
@@ -35,6 +36,7 @@
     <Style x:Key="MessagePage_MessageSubreddit" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{ThemeResource TextSizeLarge}"/>
         <Setter Property="Foreground" Value="#CACACA"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="Margin" Value="7,0,0,7"/>
         <Setter Property="TextAlignment" Value="Right"/>
     </Style>

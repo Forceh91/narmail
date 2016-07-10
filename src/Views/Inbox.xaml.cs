@@ -120,5 +120,15 @@ namespace narmail.Views
         {
             ViewModel.logout();
         }
+
+        private void friendClicked(object sender, ItemClickEventArgs e)
+        {
+            // get the message model from the clicked item
+            RedditFriendsModel redditFriendModel = (e.ClickedItem as RedditFriendsModel);
+            if (redditFriendModel == null)
+                return;
+
+            ViewModel.messageFriend(redditFriendModel);
+        }
     }
 }

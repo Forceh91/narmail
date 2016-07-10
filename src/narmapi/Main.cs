@@ -225,7 +225,7 @@ namespace narmapi
             }
             catch (Exception ex)
             {
-                _events.onErrorOccured(ex.Message);
+                _events.onAccountInboxFailed(ex.Message);
             }
         }
 
@@ -250,6 +250,31 @@ namespace narmapi
             {
                 HTTPResponse getResponse = await Utils.getHTTPString(new Uri(stringBuilder.ToString()), _accessToken);
                 parseAccountSentResponse(getResponse.response);
+
+                // update rate limits
+                updateRateLimits(getResponse.rateLimitUsed, getResponse.rateLimitRemaining, getResponse.rateLimitReset);
+            }
+            catch (Exception ex)
+            {
+                _events.onAccountSentFailed(ex.Message);
+            }
+        }
+
+        public async void getAccountFriends()
+        {
+            // make sure we're all good to use the api
+            if (await verifyAPI() == false)
+                return;
+
+            // build the url
+            StringBuilder stringBuilder = new StringBuilder(_baseOAuthURI);
+            stringBuilder.Append("api/v1/me/friends.json?show=all");
+
+            // fetch the friends list
+            try
+            {
+                HTTPResponse getResponse = await Utils.getHTTPString(new Uri(stringBuilder.ToString()), _accessToken);
+                parseAccountFriendsResponse(getResponse.response);
 
                 // update rate limits
                 updateRateLimits(getResponse.rateLimitUsed, getResponse.rateLimitRemaining, getResponse.rateLimitReset);

@@ -58,8 +58,11 @@ namespace narmapi
         public delegate void eventAccountInboxFailed(object sender, ErrorEvent e);
         public delegate void eventAccountSentReceived(object sender, AccountSentResponse e);
         public delegate void eventAccountSentFailed(object sender, ErrorEvent e);
+        public delegate void eventAccountFriendsReceived(object sender, AccountFriendsResponse e);
+        public delegate void eventAccountFriendsFailed(object sender, ErrorEvent e);
         public delegate void eventSendMessageSuccess(object sender);
         public delegate void eventSendMessageFailed(object sender, SendMessageError e);
+
         public delegate void eventRateLimited(object sender, RateLimitInformation e);
 
         public event eventErrorOccured eErrorOccured;
@@ -72,6 +75,8 @@ namespace narmapi
         public event eventAccountInboxFailed eAccountInboxFailed;
         public event eventAccountSentReceived eAccountSentReceived;
         public event eventAccountSentFailed eAccountSentFailed;
+        public event eventAccountFriendsReceived eAccountFriendsReceived;
+        public event eventAccountFriendsFailed eAccountFriendsFailed;
         public event eventSendMessageSuccess eSendMessageSuccess;
         public event eventSendMessageFailed eSendMessageFailed;
         public event eventRateLimited eRateLimited;
@@ -124,6 +129,16 @@ namespace narmapi
         public void onAccountSentFailed(string error)
         {
             eAccountSentFailed?.Invoke(this, new ErrorEvent() { error = error });
+        }
+
+        public void onAccountFriendsReceived(AccountFriendsResponse friendsResponse)
+        {
+            eAccountFriendsReceived?.Invoke(this, friendsResponse);
+        }
+
+        public void onAccountFriendsFailed(string error)
+        {
+            eAccountFriendsFailed?.Invoke(this, new ErrorEvent() { error = error });
         }
 
         public void onSendMessageSuccess()

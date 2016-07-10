@@ -101,6 +101,7 @@
     <Compile Include="Convertors\InboxConvertors.cs" />
     <Compile Include="Convertors\MessageConvertors.cs" />
     <Compile Include="Models\ComposedMessageModel.cs" />
+    <Compile Include="Models\RedditFriendsModel.cs" />
     <Compile Include="Models\InitialComposeModel.cs" />
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\NarmapiModel.cs" />

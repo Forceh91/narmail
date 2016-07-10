@@ -15,6 +15,7 @@
     </Page.DataContext>
 
     <Page.Resources>
+        <convertors:MessageTitleConvertor x:Key="MessageTitle"/>
         <convertors:MessageTimeReceivedConvertor x:Key="MessageTimeReceived"/>
         <convertors:MessageToFromUserConvertor x:Key="MessageToFromUser"/>
     </Page.Resources>
@@ -38,8 +39,8 @@
             </Grid.RowDefinitions>
 
             <!-- Message subject / Date Time -->
-            <TextBlock Style="{StaticResource MessagePage_MessageSubject}" Text="{Binding message.subject}"/>
-            <TextBlock Grid.Column="1" Style="{StaticResource MessagePage_MessageSubject}" Text="{Binding message.createdUTC, Converter={StaticResource MessageTimeReceived}}"/>
+            <TextBlock Style="{StaticResource MessagePage_MessageSubject}" Text="{Binding message, Converter={StaticResource MessageTitle}}"/>
+            <TextBlock Grid.Column="1" Style="{StaticResource MessagePage_MessageDate}" Text="{Binding message.createdUTC, Converter={StaticResource MessageTimeReceived}}"/>
 
             <!-- Message sender / subreddit -->
             <TextBlock Grid.Row="1" Style="{StaticResource MessagePage_MessageAuthor}" Text="{Binding message, Converter={StaticResource MessageToFromUser}}"/>

@@ -24,6 +24,12 @@ namespace narmail.Mvvm
         private ObservableCollection<RedditMessageModel> _sentList = new ObservableCollection<RedditMessageModel>();
         public ObservableCollection<RedditMessageModel> sentList { get { return _sentList; } set { SetProperty(ref _sentList, value); } }
 
+        private Visibility _noFriendsMessageVisibility = Visibility.Visible;
+        public Visibility noFriendsMessageVisibility { get { return _noFriendsMessageVisibility; } set { SetProperty(ref _noFriendsMessageVisibility, value); } }
+
+        private ObservableCollection<RedditFriendsModel> _friendsList = new ObservableCollection<RedditFriendsModel>();
+        public ObservableCollection<RedditFriendsModel> friendsList { get { return _friendsList; } set { SetProperty(ref _friendsList, value); } }
+
         private Visibility _isCommunicatingWithRedditVisibility = Visibility.Visible;
         public Visibility isCommunicatingWithRedditVisibility { get { return _isCommunicatingWithRedditVisibility; } set { SetProperty(ref _isCommunicatingWithRedditVisibility, value); } }
 
@@ -43,6 +49,7 @@ namespace narmail.Mvvm
         // are we loading things?
         bool isInboxLoading = false;
         bool isSentLoading = false;
+        bool isFriendsLoading = false;
 
         public InboxViewModel()
         {
@@ -53,6 +60,9 @@ namespace narmail.Mvvm
             NarmapiModel.api.events.eAccountSentFailed += accountSentFailed;
             NarmapiModel.api.events.eAccountSentReceived += accountSentReceived;
 
+            NarmapiModel.api.events.eAccountFriendsFailed += accountFriendsFailed;
+            NarmapiModel.api.events.eAccountFriendsReceived += accountFriendsReceived;
+
             // fetch the inbox messages
             NarmapiModel.api.getAccountInbox();
             isInboxLoading = true;
@@ -60,6 +70,10 @@ namespace narmail.Mvvm
             // fetch the sent messages
             NarmapiModel.api.getAccountSent();
             isSentLoading = true;
+
+            // fetch their friends
+            NarmapiModel.api.getAccountFriends();
+            isFriendsLoading = true;
         }
 
         public void unloadEvents()
@@ -68,6 +82,8 @@ namespace narmail.Mvvm
             NarmapiModel.api.events.eAccountInboxReceived -= accountInboxReceived;
             NarmapiModel.api.events.eAccountSentFailed -= accountSentFailed;
             NarmapiModel.api.events.eAccountSentReceived -= accountSentReceived;
+            NarmapiModel.api.events.eAccountFriendsFailed -= accountFriendsFailed;
+            NarmapiModel.api.events.eAccountFriendsReceived -= accountFriendsReceived;
         }
 
         public void fetchMoreInboxMessages()
@@ -116,6 +132,22 @@ namespace narmail.Mvvm
 
             // so send them to the connection page (and clear the backstack so they can't navigate backwards)
             currentFrame.Navigate(typeof(Views.Landing));
+        }
+
+        public void messageFriend(RedditFriendsModel redditFriendsModel)
+        {
+            // get the current frame
+            Frame currentFrame = (Window.Current.Content as Frame);
+            if (currentFrame == null)
+                return;
+
+            InitialComposeModel initialComposeModel = new InitialComposeModel()
+            {
+                destination = redditFriendsModel.name
+            };
+
+            // navigate to the compose window
+            currentFrame.Navigate(typeof(Views.Compose), initialComposeModel);
         }
 
         private void accountInboxFailed(object sender, Events.ErrorEvent e)
@@ -268,10 +300,57 @@ namespace narmail.Mvvm
                 areMoreSentMessagesAvailable = true;
         }
 
+        private void accountFriendsReceived(object sender, narmapi.APIResponses.AccountFriendsResponse friendsResponse)
+        {
+            // check we got some a message list
+            if (friendsResponse.data.friends == null)
+            {
+                sentNoMessageVisibility = Visibility.Visible;
+                return;
+            }
+
+            // and that there are messages in that list
+            if (friendsResponse.data.friends.Count == 0)
+            {
+                sentNoMessageVisibility = Visibility.Visible;
+                return;
+            }
+
+            // our list of messages
+            foreach (narmapi.APIResponses.FriendData friendData in friendsResponse.data.friends)
+            {
+                // add to our list
+                friendsList.Add(new RedditFriendsModel()
+                {
+                    friendsSince = Models.Utils.convertUnixTimestampToDateTime(friendData.date),
+                    id = friendData.id,
+                    name = friendData.name
+                });
+            }
+
+            // hide the no message text
+            noFriendsMessageVisibility = Visibility.Collapsed;
+
+            // no longer loading
+            isFriendsLoading = false;
+
+            // retrieving progress changed
+            retrievingProgressUpdated();
+        }
+
+        private void accountFriendsFailed(object sender, Events.ErrorEvent e)
+        {
+            // not loading
+            isFriendsLoading = false;
+
+            // retrieving progress changed
+            retrievingProgressUpdated();
+        }
+
         private void retrievingProgressUpdated()
         {
             // still loading, don't do anything
-            if (isInboxLoading == true || isSentLoading == true)
+            if (isInboxLoading == true || isSentLoading == true || isFriendsLoading == true)
                 return;
 
             // enable the command bar buttons

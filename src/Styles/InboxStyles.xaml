@@ -81,4 +81,26 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
     </Style>
 
+    <Style x:Key="Inbox_FriendsList_ItemContainer" TargetType="ListViewItem">
+        <Setter Property="Background" Value="#1A1A1A"/>
+        <Setter Property="BorderBrush" Value="#000"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="14,7"/>
+    </Style>
+
+    <Style x:Key="Inbox_FriendsList_FriendName" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeNormal}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Margin" Value="0,0,7,7"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="Inbox_FriendsList_FriendSinceDate" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{ThemeResource TextSizeNormal}"/>
+        <Setter Property="Foreground" Value="#CACACA"/>
+        <Setter Property="Margin" Value="0,0,7,7"/>
+    </Style>
+
 </ResourceDictionary>

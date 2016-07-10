@@ -1,11 +1,29 @@
 ﻿using narmail.Models;
 using System;
-using Windows.UI;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 
 namespace narmail.Convertors
 {
+    public class MessageTitleConvertor : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            RedditMessageModel redditMessageModel = (RedditMessageModel)value;
+            if (redditMessageModel == null)
+                return string.Empty;
+
+            if (redditMessageModel.wasComment == true)
+                return "re: " + redditMessageModel.linkTitle;
+
+            return redditMessageModel.subject;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class MessageTimeReceivedConvertor : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
