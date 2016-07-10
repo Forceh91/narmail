@@ -9,6 +9,9 @@ namespace narmail.Mvvm
 {
     public class InboxViewModel : BindableBase
     {
+        private bool _isCommandBarButtonEnabled = false;
+        public bool isCommandBarButtonEnabled { get { return _isCommandBarButtonEnabled; } set { SetProperty(ref _isCommandBarButtonEnabled, value); } }
+
         private Visibility _inboxNoMessageVisibility = Visibility.Visible;
         public Visibility inboxNoMessageVisibility { get { return _inboxNoMessageVisibility; } set { SetProperty(ref _inboxNoMessageVisibility, value); } }
 
@@ -20,6 +23,12 @@ namespace narmail.Mvvm
 
         private ObservableCollection<RedditMessageModel> _sentList = new ObservableCollection<RedditMessageModel>();
         public ObservableCollection<RedditMessageModel> sentList { get { return _sentList; } set { SetProperty(ref _sentList, value); } }
+
+        private Visibility _isCommunicatingWithRedditVisibility = Visibility.Visible;
+        public Visibility isCommunicatingWithRedditVisibility { get { return _isCommunicatingWithRedditVisibility; } set { SetProperty(ref _isCommunicatingWithRedditVisibility, value); } }
+
+        private string _username = NarmapiModel.getAccountUsername();
+        public string username { get { return _username; } }
 
         // store the before and after for the next time we request the inbox messages
         private string inboxBefore = string.Empty;
@@ -97,19 +106,25 @@ namespace narmail.Mvvm
 
         public void logout()
         {
+            // get the current frame
+            Frame currentFrame = (Window.Current.Content as Frame);
+            if (currentFrame == null)
+                return;
+
             // seems we want to logout
             NarmapiModel.logout();
 
-            // so send them to the connection page
-            Frame rootFrame = new Frame();
-            Window.Current.Content = rootFrame;
-            rootFrame.Navigate(typeof(Views.Landing));
+            // so send them to the connection page (and clear the backstack so they can't navigate backwards)
+            currentFrame.Navigate(typeof(Views.Landing));
         }
 
         private void accountInboxFailed(object sender, Events.ErrorEvent e)
         {
             // not loading
             isInboxLoading = false;
+
+            // progress updated
+            retrievingProgressUpdated();
         }
 
         private void accountInboxReceived(object sender, narmapi.APIResponses.AccountInboxResponse inboxResponse)
@@ -168,6 +183,9 @@ namespace narmail.Mvvm
             // no longer loading
             isInboxLoading = false;
 
+            // retrieving progress changed
+            retrievingProgressUpdated();
+
             // check if more messages are available (otherwise we'll just infinite load messages!)
             if (string.IsNullOrEmpty(inboxResponse.data.after) == true)
                 areMoreMessagesAvailable = false;
@@ -179,6 +197,9 @@ namespace narmail.Mvvm
         {
             // not loading
             isSentLoading = false;
+
+            // retrieving progress changed
+            retrievingProgressUpdated();
         }
 
         private void accountSentReceived(object sender, narmapi.APIResponses.AccountSentResponse sentResponse)
@@ -237,11 +258,27 @@ namespace narmail.Mvvm
             // no longer loading
             isSentLoading = false;
 
+            // retrieving progress changed
+            retrievingProgressUpdated();
+
             // check if more messages are available (otherwise we'll just infinite load messages!)
             if (string.IsNullOrEmpty(sentResponse.data.after) == true)
                 areMoreSentMessagesAvailable = false;
             else
                 areMoreSentMessagesAvailable = true;
+        }
+
+        private void retrievingProgressUpdated()
+        {
+            // still loading, don't do anything
+            if (isInboxLoading == true || isSentLoading == true)
+                return;
+
+            // enable the command bar buttons
+            isCommandBarButtonEnabled = true;
+
+            // hide the communicating... text
+            isCommunicatingWithRedditVisibility = Visibility.Collapsed;
         }
     }
 }

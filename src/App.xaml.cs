@@ -111,7 +111,7 @@ namespace narmail
             Frame rootFrame = (Window.Current.Content as Frame);
 
             // clear the backstack if we go to the home page
-            if (e.SourcePageType == typeof(Views.Inbox))
+            if (e.SourcePageType == typeof(Views.Inbox) || e.SourcePageType == typeof(Views.Landing))
                 rootFrame.BackStack?.Clear();
 
             // handle the back button

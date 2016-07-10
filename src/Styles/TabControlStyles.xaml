@@ -265,7 +265,7 @@
                                         <Border
                                                 Grid.ColumnSpan="3"
                                                 Grid.Row="1"
-                                                Background="{ThemeResource SystemControlPageBackgroundChromeMediumBrush}"
+                                                Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}"
                                                 BorderBrush="{ThemeResource SystemControlForegroundChromeMediumBrush}"
                                                 BorderThickness="0,0,0,1" />
 

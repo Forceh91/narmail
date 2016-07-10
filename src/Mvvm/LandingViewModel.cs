@@ -99,10 +99,13 @@ namespace narmail.Mvvm
 
         private void sendUserToInbox()
         {
+            // get the current frame
+            Frame currentFrame = (Window.Current.Content as Frame);
+            if (currentFrame == null)
+                return;
+
             // force the user to the inbox (without allowing them to go back)
-            Frame rootFrame = new Frame();
-            Window.Current.Content = rootFrame;
-            rootFrame.Navigate(typeof(Views.Inbox));
+            currentFrame.Navigate(typeof(Views.Inbox));
         }
     }
 }

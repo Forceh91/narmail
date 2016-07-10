@@ -74,11 +74,21 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
+        <Grid Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Padding="7">
+            <StackPanel Background="{ThemeResource SystemControlPageBackgroundChromeLowBrush}" Orientation="Horizontal" Visibility="{Binding isCommunicatingWithRedditVisibility}">
+                <ProgressRing Style="{StaticResource Inbox_RetrievingProgress}"/>
+                <TextBlock Style="{StaticResource Inbox_RetrievingText}" Text="Communicating with reddit..."/>
+            </StackPanel>
+            
+            <TextBlock Style="{StaticResource Inbox_Username}" Text="{Binding username}"/>
+        </Grid>
         
-        <Pivot Margin="-12,0,-12,0" Style="{StaticResource TabControl_Pivot}">
+        <Pivot Grid.Row="1" Margin="-12,0,-12,0" Style="{StaticResource TabControl_Pivot}">
             <PivotItem>
                 <PivotItem.Header>
                     <controls:TabControl Glyph="&#59157;" Label="Inbox"/>
@@ -114,13 +124,13 @@
             </PivotItem>
         </Pivot>
 
-        <CommandBar Grid.Row="1">
+        <CommandBar Grid.Row="2">
             <CommandBar.PrimaryCommands>
-                <AppBarButton Click="gotoComposeMessage" Icon="Add" Label="New message"/>
+                <AppBarButton Click="gotoComposeMessage" Icon="Add" IsEnabled="{Binding isCommandBarButtonEnabled}" Label="New message"/>
             </CommandBar.PrimaryCommands>
 
             <CommandBar.SecondaryCommands>
-                <AppBarButton Click="logoutUser" Icon="LeaveChat" Label="Logout"/>
+                <AppBarButton Click="logoutUser" Icon="LeaveChat" IsEnabled="{Binding isCommandBarButtonEnabled}" Label="Logout"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
