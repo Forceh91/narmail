@@ -98,6 +98,7 @@ namespace narmail.Mvvm
 
             // we're loading more messages
             isInboxLoading = true;
+            isCommunicatingWithRedditVisibility = Visibility.Visible;
 
             // fetch the messages
             NarmapiModel.api.getAccountInbox(string.Empty, inboxAfter);
@@ -115,6 +116,7 @@ namespace narmail.Mvvm
 
             // we're loading more messages
             isSentLoading = true;
+            isCommunicatingWithRedditVisibility = Visibility.Visible;
 
             // fetch the messages
             NarmapiModel.api.getAccountSent(string.Empty, sentAfter);
@@ -165,6 +167,12 @@ namespace narmail.Mvvm
             inboxBefore = inboxResponse.data.before;
             inboxAfter = inboxResponse.data.after;
 
+            // no longer loading
+            isInboxLoading = false;
+
+            // retrieving progress changed
+            retrievingProgressUpdated();
+
             // check we got some a message list
             if (inboxResponse.data.messages == null)
             {
@@ -212,12 +220,6 @@ namespace narmail.Mvvm
             // hide the no message text
             inboxNoMessageVisibility = Visibility.Collapsed;
 
-            // no longer loading
-            isInboxLoading = false;
-
-            // retrieving progress changed
-            retrievingProgressUpdated();
-
             // check if more messages are available (otherwise we'll just infinite load messages!)
             if (string.IsNullOrEmpty(inboxResponse.data.after) == true)
                 areMoreMessagesAvailable = false;
@@ -239,6 +241,12 @@ namespace narmail.Mvvm
             // we have received our inbox, lets store stuff locally
             sentBefore = sentResponse.data.before;
             sentAfter = sentResponse.data.after;
+
+            // no longer loading
+            isSentLoading = false;
+
+            // retrieving progress changed
+            retrievingProgressUpdated();
 
             // check we got some a message list
             if (sentResponse.data.messages == null)
@@ -287,12 +295,6 @@ namespace narmail.Mvvm
             // hide the no message text
             sentNoMessageVisibility = Visibility.Collapsed;
 
-            // no longer loading
-            isSentLoading = false;
-
-            // retrieving progress changed
-            retrievingProgressUpdated();
-
             // check if more messages are available (otherwise we'll just infinite load messages!)
             if (string.IsNullOrEmpty(sentResponse.data.after) == true)
                 areMoreSentMessagesAvailable = false;
@@ -302,6 +304,12 @@ namespace narmail.Mvvm
 
         private void accountFriendsReceived(object sender, narmapi.APIResponses.AccountFriendsResponse friendsResponse)
         {
+            // no longer loading
+            isFriendsLoading = false;
+
+            // retrieving progress changed
+            retrievingProgressUpdated();
+
             // check we got some a message list
             if (friendsResponse.data.friends == null)
             {
@@ -330,12 +338,6 @@ namespace narmail.Mvvm
 
             // hide the no message text
             noFriendsMessageVisibility = Visibility.Collapsed;
-
-            // no longer loading
-            isFriendsLoading = false;
-
-            // retrieving progress changed
-            retrievingProgressUpdated();
         }
 
         private void accountFriendsFailed(object sender, Events.ErrorEvent e)
