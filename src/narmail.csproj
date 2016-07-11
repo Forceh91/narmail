@@ -217,6 +217,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\narmailbackground\narmailbackground.csproj">
+      <Project>{a2d58ed2-eb2c-4395-91ed-96cd5b90808f}</Project>
+      <Name>narmailbackground</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UniversalMarkdown\UniversalMarkdown\UniversalMarkdown.csproj">
       <Project>{9ffc3b68-696a-4342-a2b8-2eadddef7ff9}</Project>
       <Name>UniversalMarkdown</Name>

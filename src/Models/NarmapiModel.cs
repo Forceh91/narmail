@@ -108,6 +108,15 @@ namespace narmail.Models
                 roamingSettings.Values.Add(settingName, username);
         }
 
+        public static void setNotifiedMessageIDs(string messageIDs)
+        {
+            string settingName = "narmail_background_notified_messages";
+            if (roamingSettings.Values.ContainsKey(settingName) == true)
+                roamingSettings.Values[settingName] = messageIDs;
+            else
+                roamingSettings.Values.Add(settingName, messageIDs);
+        }
+
         private static void apiErrorOccured(object sender, Events.ErrorEvent e)
         {
             MessageModel.sendDialogMessage("NarmAPI Error", e.error);

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Narmail")]
-[assembly: AssemblyDescription("A open-source Windows 10 inbox client for reddit")]
+[assembly: AssemblyTitle("narmailbackground")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Madnight Software")]
-[assembly: AssemblyProduct("Narmail")]
-[assembly: AssemblyCopyright("Copyright © Madnight Software 2016")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("narmailbackground")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -2,6 +2,7 @@
 using narmapi;
 using System;
 using System.Collections.ObjectModel;
+using Windows.ApplicationModel.Background;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -53,6 +54,9 @@ namespace narmail.Mvvm
 
         public InboxViewModel()
         {
+            // clear any notifications
+            Models.Utils.clearNotifications();
+
             // assign events
             NarmapiModel.api.events.eAccountInboxFailed += accountInboxFailed;
             NarmapiModel.api.events.eAccountInboxReceived += accountInboxReceived;
@@ -74,6 +78,9 @@ namespace narmail.Mvvm
             // fetch their friends
             NarmapiModel.api.getAccountFriends();
             isFriendsLoading = true;
+
+            // register the background task
+            registerBackgroundTask();
         }
 
         public void unloadEvents()
@@ -360,6 +367,41 @@ namespace narmail.Mvvm
 
             // hide the communicating... text
             isCommunicatingWithRedditVisibility = Visibility.Collapsed;
+        }
+
+        private async void registerBackgroundTask()
+        {
+            string taskName = "NarmailMessageCheck";
+            string taskEntryPoint = "narmailbackground.NarmailBackground";
+
+            // request access
+            BackgroundAccessStatus backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+
+            // if we've got access we can start doing things
+            if (backgroundAccessStatus == BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity || backgroundAccessStatus == BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
+            {
+                // cancel any running tasks from this app
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    // ignore it if it doesn't belong to this app
+                    if (task.Value.Name != taskName)
+                        continue;
+
+                    // it's our task so cancel it
+                    task.Value.Unregister(true);
+                }
+
+                // now we don't have any random tasks we can re-register ours
+                BackgroundTaskBuilder backgroundTaskBuilder = new BackgroundTaskBuilder()
+                {
+                    Name = taskName,
+                    TaskEntryPoint = taskEntryPoint,
+                };
+
+                // tell it to fire once every 15mins and away we go
+                backgroundTaskBuilder.SetTrigger(new TimeTrigger(15, false));
+                backgroundTaskBuilder.Register();
+            }
         }
     }
 }
