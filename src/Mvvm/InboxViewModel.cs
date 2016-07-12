@@ -57,16 +57,6 @@ namespace narmail.Mvvm
             // clear any notifications
             Models.Utils.clearNotifications();
 
-            // assign events
-            NarmapiModel.api.events.eAccountInboxFailed += accountInboxFailed;
-            NarmapiModel.api.events.eAccountInboxReceived += accountInboxReceived;
-
-            NarmapiModel.api.events.eAccountSentFailed += accountSentFailed;
-            NarmapiModel.api.events.eAccountSentReceived += accountSentReceived;
-
-            NarmapiModel.api.events.eAccountFriendsFailed += accountFriendsFailed;
-            NarmapiModel.api.events.eAccountFriendsReceived += accountFriendsReceived;
-
             // fetch the inbox messages
             NarmapiModel.api.getAccountInbox();
             isInboxLoading = true;
@@ -81,6 +71,19 @@ namespace narmail.Mvvm
 
             // register the background task
             registerBackgroundTask();
+        }
+
+        public void loadEvents()
+        {
+            // assign events
+            NarmapiModel.api.events.eAccountInboxFailed += accountInboxFailed;
+            NarmapiModel.api.events.eAccountInboxReceived += accountInboxReceived;
+
+            NarmapiModel.api.events.eAccountSentFailed += accountSentFailed;
+            NarmapiModel.api.events.eAccountSentReceived += accountSentReceived;
+
+            NarmapiModel.api.events.eAccountFriendsFailed += accountFriendsFailed;
+            NarmapiModel.api.events.eAccountFriendsReceived += accountFriendsReceived;
         }
 
         public void unloadEvents()

@@ -3,6 +3,7 @@ using narmail.Mvvm;
 using System;
 using Windows.System;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Controls;
 
 namespace narmail.Views
@@ -15,12 +16,23 @@ namespace narmail.Views
 
         public Inbox()
         {
+            NavigationCacheMode = NavigationCacheMode.Required;
             this.InitializeComponent();
             ViewModel = (DataContext as InboxViewModel);
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            // assign events
+            ViewModel.loadEvents();
+
+            // base stuff!
+            base.OnNavigatedTo(e);
+        }
+
         private void pageUnloaded(object sender, RoutedEventArgs e)
         {
+            // unload the events
             ViewModel.unloadEvents();
         }
 
