@@ -52,5 +52,23 @@ namespace narmailbackground
             else
                 roamingSettings.Values.Add(settingName, messageIDs);
         }
+
+        public static void setLastCheckedForMessages(double unixTimestamp)
+        {
+            string settingName = "narmail_background_last_checked";
+            if (roamingSettings.Values.ContainsKey(settingName) == true)
+                roamingSettings.Values[settingName] = unixTimestamp;
+            else
+                roamingSettings.Values.Add(settingName, unixTimestamp);
+        }
+
+        public static double getLastCheckedForMessages()
+        {
+            string settingName = "narmail_background_last_checked";
+            if (roamingSettings.Values.ContainsKey(settingName) == true)
+                return (double)roamingSettings.Values[settingName];
+
+            return 0;
+        }
     }
 }

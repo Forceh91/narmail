@@ -260,6 +260,37 @@ namespace narmapi
             }
         }
 
+        public async void getAccountInboxUnread(string before = "", string after = "")
+        {
+            // make sure we're all good to use the api
+            if (await verifyAPI() == false)
+                return;
+
+            // build the url
+            StringBuilder stringBuilder = new StringBuilder(_baseOAuthURI);
+            stringBuilder.Append("message/unread/?raw_json=1");
+
+            // append the before/after if need to
+            if (string.IsNullOrEmpty(before) == false)
+                stringBuilder.AppendFormat("&before={0}", before);
+            else if (string.IsNullOrEmpty(after) == false)
+                stringBuilder.AppendFormat("&after={0}", after);
+
+            // grab the information about the inbox
+            try
+            {
+                HTTPResponse getResponse = await Utils.getHTTPString(new Uri(stringBuilder.ToString()), _accessToken);
+                parseAccountInboxResponse(getResponse.response);
+
+                // update rate limits
+                updateRateLimits(getResponse.rateLimitUsed, getResponse.rateLimitRemaining, getResponse.rateLimitReset);
+            }
+            catch (Exception ex)
+            {
+                _events.onAccountInboxFailed(ex.Message);
+            }
+        }
+
         public async void getAccountFriends()
         {
             // make sure we're all good to use the api

@@ -1,5 +1,6 @@
 ﻿using narmapi;
 using narmapi.APIResponses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.ApplicationModel.Background;
@@ -33,7 +34,7 @@ namespace narmailbackground
             api.events.eAccountInboxReceived += apiInboxReceived;
 
             // ask for the inbox
-            api.getAccountInbox();
+            api.getAccountInboxUnread();
         }
 
         private void apiErrorOccured(object sender, Events.ErrorEvent e)
@@ -63,48 +64,22 @@ namespace narmailbackground
                 if (toastNotifier == null)
                     return;
 
-                // list of all the message IDs that are unread
-                List<string> unreadMessageIDs = new List<string>();
-                List<string> previouslyUnreadMessageIDs = new List<string>(); ;
+                // get the current timestamp
+                double currentUTCUnixTimestamp = getCurrentUnixTimestamp();
+                double lastCheckedForMessages = NarmapiModel.getLastCheckedForMessages();
 
-                // messages that we've notified the user about
-                string previouslyNotifiedUnreadMessages = NarmapiModel.getNotifiedMessageIDs();
-
-                // this list is comma seperated so we need to break it up
-                if (string.IsNullOrEmpty(previouslyNotifiedUnreadMessages) == false)
-                    previouslyUnreadMessageIDs = previouslyNotifiedUnreadMessages.Split(',').ToList();
-
-                // go through the messages
-                foreach (Message messageResponse in e.data.messages.Where(message => message.data.unread == true))
+                // go through the messages that have appeared since we last notified
+                foreach (Message messageResponse in e.data.messages.Where(message => message.data.createdUTC >= lastCheckedForMessages))
                 {
-                    // have we notified about this message before?
-                    if (previouslyNotifiedUnreadMessages.Contains(messageResponse.data.name) == true)
-                        continue;
-
-                    // add it to the list
-                    unreadMessageIDs.Add(messageResponse.data.name);
-
                     // notify about it.
                     createToastNotification(toastNotifier, (messageResponse.data.wasComment == true ? "re: " + messageResponse.data.linkTitle : messageResponse.data.subject), messageResponse.data.author, messageResponse.data.body);
                 }
 
-                // store the list of notified about messages
-                string newlyNotifiedMessages = string.Empty;
-
-                // join the list if there were items in it
-                if (unreadMessageIDs.Count > 0)
-                    newlyNotifiedMessages = (string.Join(",", previouslyUnreadMessageIDs) + "," + string.Join(",", unreadMessageIDs));
-                else
-                {
-                    if (previouslyUnreadMessageIDs.Count > 0)
-                        newlyNotifiedMessages = string.Join(",", previouslyUnreadMessageIDs);
-                }
-
                 // store it!
-                NarmapiModel.setNotifiedMessageIDs(newlyNotifiedMessages);
+                NarmapiModel.setLastCheckedForMessages(currentUTCUnixTimestamp);
 
                 // update the badge count of unread messages
-                updateAppBadgeCount(previouslyUnreadMessageIDs.Count + unreadMessageIDs.Count);
+                updateAppBadgeCount(e.data.messages.Count);
             }
             catch
             {
@@ -161,6 +136,16 @@ namespace narmailbackground
             {
                 return;
             }
+        }
+
+        private double getCurrentUnixTimestamp()
+        {
+            // when the unix time started and what the current time is
+            DateTime unixTimestampStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime currentTime = DateTime.UtcNow;
+
+            // return the number of seconds that have passed since 1970
+            return ((currentTime - unixTimestampStart).TotalSeconds);
         }
     }
 }
