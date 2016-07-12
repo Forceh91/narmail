@@ -16,6 +16,9 @@ namespace narmail.Mvvm
         private bool _isSubjectEnabled = true;
         public bool isSubjectEnabled { get { return _isSubjectEnabled; } set { SetProperty(ref _isSubjectEnabled, value); } }
 
+        private bool _isBodyEnabled = true;
+        public bool isBodyEnabled { get { return _isBodyEnabled; } set { SetProperty(ref _isBodyEnabled, value); } }
+
         private bool _isSendEnabled = false;
         public bool isSendEnabled { get { return _isSendEnabled; } set { SetProperty(ref _isSendEnabled, value); } }
 
@@ -124,7 +127,7 @@ namespace narmail.Mvvm
         private void sendMessageFailed(object sender, Events.SendMessageError e)
         {
             // remove the event
-            NarmapiModel.api.events.eSendMessageFailed += sendMessageFailed;
+            NarmapiModel.api.events.eSendMessageFailed -= sendMessageFailed;
 
             // throw an alert box
             if (e.errorID == "BAD_CAPTCHA")
@@ -141,6 +144,14 @@ namespace narmail.Mvvm
         {
             sendingMessageOverlayVisibility = (isVisible == true ? Visibility.Visible : Visibility.Collapsed);
             isSendEnabled = (!isVisible);
+            isBodyEnabled = (!isVisible);
+
+            // toggle the subject/recipient if it's not a reply
+            if (message.isReply == false)
+            {
+                isSubjectEnabled = (!isVisible);
+                isRecipientEnabled = (!isVisible);
+            }
         }
     }
 }

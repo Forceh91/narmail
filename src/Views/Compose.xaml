@@ -47,7 +47,7 @@
                         <TextBox Header="Recipient (username or /r/subreddit)" IsEnabled="{Binding isRecipientEnabled}" KeyUp="messageInputKeyUp" Style="{StaticResource ComposeMessage_RecipientInput}" Text="{Binding message.destination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <!-- Message -->
-                        <TextBox Header="Message (raw markdown)" KeyUp="messageInputKeyUp" Style="{StaticResource ComposeMessage_MessageInput}" Text="{Binding message.body, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Header="Message (raw markdown)" IsEnabled="{Binding isBodyEnabled}" KeyUp="messageInputKeyUp" Style="{StaticResource ComposeMessage_MessageInput}" Text="{Binding message.body, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
                     <!-- Message preview -->
