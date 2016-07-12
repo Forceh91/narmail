@@ -151,6 +151,7 @@
         <CommandBar Grid.Row="2">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Click="gotoComposeMessage" Icon="Add" IsEnabled="{Binding isCommandBarButtonEnabled}" Label="New message"/>
+                <AppBarButton Click="refreshInbox" Icon="Refresh" IsEnabled="{Binding isCommandBarButtonEnabled}" Label="Refresh"/>
             </CommandBar.PrimaryCommands>
 
             <CommandBar.SecondaryCommands>

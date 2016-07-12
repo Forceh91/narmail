@@ -48,9 +48,10 @@ namespace narmail.Mvvm
         private bool areMoreSentMessagesAvailable = false;
 
         // are we loading things?
-        bool isInboxLoading = false;
-        bool isSentLoading = false;
-        bool isFriendsLoading = false;
+        private bool isRefreshing = false;
+        private bool isInboxLoading = false;
+        private bool isSentLoading = false;
+        private bool isFriendsLoading = false;
 
         public InboxViewModel()
         {
@@ -162,6 +163,27 @@ namespace narmail.Mvvm
             currentFrame.Navigate(typeof(Views.Compose), initialComposeModel);
         }
 
+        public void refreshInbox()
+        {
+            // tell it that we're refreshing
+            isRefreshing = true;
+            isCommandBarButtonEnabled = false;
+
+            // clear the before/after of things
+            inboxBefore = string.Empty;
+            inboxAfter = string.Empty;
+
+            // fetch inbox
+            fetchMoreInboxMessages();
+
+            // clear the before/after of things
+            sentBefore = string.Empty;
+            sentAfter = string.Empty;
+
+            // fetch sent
+            fetchMoreSentMessages();
+        }
+
         private void accountInboxFailed(object sender, Events.ErrorEvent e)
         {
             // not loading
@@ -173,6 +195,10 @@ namespace narmail.Mvvm
 
         private void accountInboxReceived(object sender, narmapi.APIResponses.AccountInboxResponse inboxResponse)
         {
+            // clear the inbox list if we refreshed
+            if (isRefreshing == true)
+                inboxList.Clear();
+
             // we have received our inbox, lets store stuff locally
             inboxBefore = inboxResponse.data.before;
             inboxAfter = inboxResponse.data.after;
@@ -248,6 +274,10 @@ namespace narmail.Mvvm
 
         private void accountSentReceived(object sender, narmapi.APIResponses.AccountSentResponse sentResponse)
         {
+            // clear the sent list if we refreshed
+            if (isRefreshing == true)
+                sentList.Clear();
+
             // we have received our inbox, lets store stuff locally
             sentBefore = sentResponse.data.before;
             sentAfter = sentResponse.data.after;
@@ -370,6 +400,10 @@ namespace narmail.Mvvm
 
             // hide the communicating... text
             isCommunicatingWithRedditVisibility = Visibility.Collapsed;
+
+            // no longer refreshing
+            if (isRefreshing == true)
+                isRefreshing = false;
         }
 
         private async void registerBackgroundTask()

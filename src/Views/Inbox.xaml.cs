@@ -3,8 +3,8 @@ using narmail.Mvvm;
 using System;
 using Windows.System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace narmail.Views
 {
@@ -85,7 +85,7 @@ namespace narmail.Views
 
             // get the progress
             double scrollProgress = (scrollViewer.VerticalOffset / scrollViewer.ScrollableHeight);
-
+            
             // load more messages if we've hit the bottom (almost)
             if (scrollProgress >= 0.98)
                 ViewModel.fetchMoreInboxMessages();
@@ -153,6 +153,11 @@ namespace narmail.Views
         private async void rateReview(object sender, RoutedEventArgs e)
         {
             await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=57919e11-d572-4c16-8e28-1191c51531b3"));
+        }
+
+        private void refreshInbox(object sender, RoutedEventArgs e)
+        {
+            ViewModel.refreshInbox();
         }
     }
 }
